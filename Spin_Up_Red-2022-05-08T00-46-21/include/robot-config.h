@@ -19,8 +19,10 @@ extern signature Vision6__SIG_5;
 extern signature Vision6__SIG_6;
 extern signature Vision6__SIG_7;
 extern vision Vision6;
-extern rotation Rotation8;
-extern rotation Rotation9;
+extern encoder RightSide;
+extern encoder LeftSide;
+extern encoder BackSide;
+extern controller Controller1;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

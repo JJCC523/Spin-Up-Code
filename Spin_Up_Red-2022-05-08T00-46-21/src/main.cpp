@@ -12,13 +12,15 @@
 // [Name]               [Type]        [Port(s)]
 // fL                   motor         1               
 // bL                   motor         2               
-// fR                   motor         3               
-// bR                   motor         4               
+// fR                   motor         10              
+// bR                   motor         9               
 // Inertial5            inertial      5               
 // RollerWheel          motor         7               
 // Vision6              vision        6               
-// Rotation8            rotation      8               
-// Rotation9            rotation      9               
+// RightSide            encoder       A, B            
+// LeftSide             encoder       C, D            
+// BackSide             encoder       E, F            
+// Controller1          controller                    
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -33,16 +35,16 @@ competition Competition;
 
 
 //settings
-double kP = 0.0;
+double kP = 0.5;
 double kI = 0.0;
 double kD = 0.0;
 
-double turnkP = 0.0;
+double turnkP = 0.5;
 double turnkI = 0.0;
 double turnkD = 0.0;
 
-int desiredValue = 200;
-int desiredTurnValue = 0;
+int desiredValue;
+int desiredTurnValue;
 
 int error; //Sensor Value - Target Value : position
 int prevError = 0; //position 20 msecs ago
@@ -56,22 +58,22 @@ int turnTotalError = 0; //TotalError= totalError + error
 
 bool enableDrivePID= true;
 
-bool resetDriveSensors=false;
+bool resetDriveSensors=true;
 
 int drivePID(){
   while(enableDrivePID){
     if(resetDriveSensors){
       resetDriveSensors = false;
 
-      Rotation8.setPosition(0, degrees);
-      Rotation9.setPosition(0, degrees);
+      RightSide.setPosition(0, degrees);
+      LeftSide.setPosition(0, degrees);
 
     }
 
     //int GyroPosition = Inertial5.heading(degrees);
     //wheel position
-    int LeftWheelPosition = Rotation8.position(degrees);
-    int RightWheelPosition = Rotation8.position(degrees);
+    int LeftWheelPosition = LeftSide.position(degrees);
+    int RightWheelPosition = RightSide.position(degrees);
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -82,7 +84,7 @@ int drivePID(){
     int averagePosition = (LeftWheelPosition+RightWheelPosition)/2;
 
     //potential
-    error = averagePosition - desiredValue;
+    error =desiredValue - averagePosition;
 
     //derivative
     derivative = error - prevError;
@@ -140,6 +142,9 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
 
+  Controller1.Screen.print(LeftSide.rotation(degrees));
+  Controller1.Screen.print(RightSide.rotation(degrees));
+
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -153,8 +158,11 @@ void autonomous(void) {
     desiredTurnValue = number
 
   */
+  resetDriveSensors = true;
   vex::task PID(drivePID);
-  
+  resetDriveSensors = true;
+  desiredValue = 5;
+  desiredTurnValue = 0;
 
 
 
@@ -164,7 +172,43 @@ void autonomous(void) {
 void usercontrol(void) {
   enableDrivePID= false;
   while (1) {
-    
+    // Deadband stops the motors when Axis values are close to zero.
+  int deadband = 5;
+
+  while (true) {
+    // Get the velocity percentage of the left motor. (Axis3 + Axis4)
+    int leftMotorSpeed =
+        Controller1.Axis3.position() + Controller1.Axis4.position();
+    // Get the velocity percentage of the right motor. (Axis3 - Axis4)
+    int rightMotorSpeed =
+        Controller1.Axis3.position() - Controller1.Axis4.position();
+
+    // Set the speed of the left motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(leftMotorSpeed) < deadband) {
+      // Set the speed to zero.
+      fL.setVelocity(0, percent);
+    } else {
+      // Set the speed to leftMotorSpeed
+      fL.setVelocity(leftMotorSpeed, percent);
+    }
+
+    // Set the speed of the right motor. If the value is less than the deadband,
+    // set it to zero.
+    if (abs(rightMotorSpeed) < deadband) {
+      // Set the speed to zero
+      fR.setVelocity(0, percent);
+    } else {
+      // Set the speed to rightMotorSpeed
+      fR.setVelocity(rightMotorSpeed, percent);
+    }
+
+    // Spin both motors in the forward direction.
+    fL.spin(forward);
+    fR.spin(forward);
+
+    wait(25, msec);
+  }
 
     wait(20, msec); 
   }
