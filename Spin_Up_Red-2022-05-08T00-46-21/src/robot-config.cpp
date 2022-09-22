@@ -8,10 +8,10 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
-motor fL = motor(PORT1, ratio6_1, true);
-motor bL = motor(PORT2, ratio6_1, true);
-motor fR = motor(PORT10, ratio6_1, false);
-motor bR = motor(PORT9, ratio6_1, false);
+motor fL = motor(PORT2, ratio6_1, true);
+motor bL = motor(PORT9, ratio6_1, true);
+motor fR = motor(PORT1, ratio6_1, false);
+motor bR = motor(PORT10, ratio6_1, false);
 inertial Inertial5 = inertial(PORT5);
 motor RollerWheel = motor(PORT7, ratio18_1, false);
 /*vex-vision-config:begin*/

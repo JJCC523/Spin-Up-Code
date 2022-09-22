@@ -10,10 +10,10 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// fL                   motor         1               
-// bL                   motor         2               
-// fR                   motor         10              
-// bR                   motor         9               
+// fL                   motor         2               
+// bL                   motor         9               
+// fR                   motor         1               
+// bR                   motor         10              
 // Inertial5            inertial      5               
 // RollerWheel          motor         7               
 // Vision6              vision        6               
@@ -178,35 +178,58 @@ void usercontrol(void) {
   while (true) {
     // Get the velocity percentage of the left motor. (Axis3 + Axis4)
     int leftMotorSpeed =
-        Controller1.Axis3.position() + Controller1.Axis4.position();
+        Controller1.Axis3.position() + Controller1.Axis1.position();
     // Get the velocity percentage of the right motor. (Axis3 - Axis4)
     int rightMotorSpeed =
-        Controller1.Axis3.position() - Controller1.Axis4.position();
+        Controller1.Axis3.position() - Controller1.Axis1.position();
+    int sideways =
+        Controller1.Axis4.position();
 
     // Set the speed of the left motor. If the value is less than the deadband,
     // set it to zero.
     if (abs(leftMotorSpeed) < deadband) {
       // Set the speed to zero.
       fL.setVelocity(0, percent);
+      bL.setVelocity(0, percent);
     } else {
       // Set the speed to leftMotorSpeed
       fL.setVelocity(leftMotorSpeed, percent);
+      bL.setVelocity(leftMotorSpeed, percent);
+
     }
 
     // Set the speed of the right motor. If the value is less than the deadband,
-    // set it to zero.
+    // set it to zero. 
     if (abs(rightMotorSpeed) < deadband) {
       // Set the speed to zero
       fR.setVelocity(0, percent);
+      bR.setVelocity(0, percent);
     } else {
       // Set the speed to rightMotorSpeed
       fR.setVelocity(rightMotorSpeed, percent);
+      bR.setVelocity(rightMotorSpeed, percent);
+    }
+
+    if (abs(sideways) < deadband) {
+      // Set the speed to zero.
+      fL.setVelocity(0, percent);
+      bL.setVelocity(0, percent);
+      fR.setVelocity(0, percent);
+      bR.setVelocity(0, percent);
+    } else {
+      // Set the speed to leftMotorSpeed
+      fL.setVelocity(sideways, percent);
+      bR.setVelocity(sideways, percent);
+      fR.setVelocity((sideways*-1), percent);
+      bL.setVelocity((sideways*-1), percent);
+
     }
 
     // Spin both motors in the forward direction.
     fL.spin(forward);
     fR.spin(forward);
-
+    bL.spin(forward);
+    bR.spin(forward);
     wait(25, msec);
   }
 
