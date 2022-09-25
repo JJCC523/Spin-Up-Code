@@ -35,16 +35,16 @@ competition Competition;
 
 
 //settings
-double kP = 0.5;
+double kP = 0.02;
 double kI = 0.0;
-double kD = 0.0;
+double kD = 0.001;
 
-double turnkP = 0.5;
+double turnkP = 0.003;
 double turnkI = 0.0;
 double turnkD = 0.0;
 
-int desiredValue;
-int desiredTurnValue;
+int desiredValue = 0;
+int desiredTurnValue = 0;
 
 int error; //Sensor Value - Target Value : position
 int prevError = 0; //position 20 msecs ago
@@ -63,14 +63,13 @@ bool resetDriveSensors=true;
 int drivePID(){
   while(enableDrivePID){
     if(resetDriveSensors){
-      resetDriveSensors = false;
-
       RightSide.setPosition(0, degrees);
       LeftSide.setPosition(0, degrees);
+      resetDriveSensors = false;
 
     }
 
-    //int GyroPosition = Inertial5.heading(degrees);
+   //int GyroPosition = Inertial5.heading(degrees);
     //wheel position
     int LeftWheelPosition = LeftSide.position(degrees);
     int RightWheelPosition = RightSide.position(degrees);
@@ -161,7 +160,7 @@ void autonomous(void) {
   resetDriveSensors = true;
   vex::task PID(drivePID);
   resetDriveSensors = true;
-  desiredValue = 5;
+  desiredValue = 100;
   desiredTurnValue = 0;
 
 
@@ -176,8 +175,23 @@ void usercontrol(void) {
   int deadband = 5;
 
   while (true) {
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bR.setStopping(hold);
+    bL.setStopping(hold);
+
+    int forwardcontroller = Controller1.Axis3.position(percent);
+    int sidewayscontroller= Controller1.Axis4.position(percent);
+    int turncontroller= Controller1.Axis1.position(percent);
+
+fR.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
+fL.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
+bR.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
+bL.spin(forward, forwardcontroller-sidewayscontroller-turncontroller, percent);
+
+ 
     // Get the velocity percentage of the left motor. (Axis3 + Axis4)
-    int leftMotorSpeed =
+    /*int leftMotorSpeed =
         Controller1.Axis3.position() + Controller1.Axis1.position();
     // Get the velocity percentage of the right motor. (Axis3 - Axis4)
     int rightMotorSpeed =
@@ -193,8 +207,8 @@ void usercontrol(void) {
       bL.setVelocity(0, percent);
     } else {
       // Set the speed to leftMotorSpeed
-      fL.setVelocity(leftMotorSpeed, percent);
-      bL.setVelocity(leftMotorSpeed, percent);
+      fL.setVelocity(leftMotorSpeed+sideways, percent);
+      bL.setVelocity(leftMotorSpeed - sideways, percent);
 
     }
 
@@ -206,11 +220,11 @@ void usercontrol(void) {
       bR.setVelocity(0, percent);
     } else {
       // Set the speed to rightMotorSpeed
-      fR.setVelocity(rightMotorSpeed, percent);
-      bR.setVelocity(rightMotorSpeed, percent);
-    }
+      fR.setVelocity(rightMotorSpeed - sideways, percent);
+      bR.setVelocity(rightMotorSpeed + sideways, percent);
+    }*/
 
-    if (abs(sideways) < deadband) {
+    /*if (abs(sideways) < deadband) {
       // Set the speed to zero.
       fL.setVelocity(0, percent);
       bL.setVelocity(0, percent);
@@ -223,13 +237,13 @@ void usercontrol(void) {
       fR.setVelocity((sideways*-1), percent);
       bL.setVelocity((sideways*-1), percent);
 
-    }
+    }*/
 
     // Spin both motors in the forward direction.
-    fL.spin(forward);
-    fR.spin(forward);
-    bL.spin(forward);
-    bR.spin(forward);
+    //fL.spin(forward);
+    //fR.spin(forward);
+    //bL.spin(forward);
+    //bR.spin(forward);
     wait(25, msec);
   }
 
