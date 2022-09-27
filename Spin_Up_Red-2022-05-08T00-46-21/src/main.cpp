@@ -35,13 +35,13 @@ competition Competition;
 
 
 //settings
-double kP = 0.02;
-double kI = 0.0;
-double kD = 0.001;
+double kP = 0.009;
+double kI = 0.00000;
+double kD = 0.00;
 
-double turnkP = 0.003;
-double turnkI = 0.0;
-double turnkD = 0.0;
+double turnkP = 0.009;
+double turnkI = 0.0000;
+double turnkD = 0.00;
 
 int desiredValue = 0;
 int desiredTurnValue = 0;
@@ -83,15 +83,15 @@ int drivePID(){
     int averagePosition = (LeftWheelPosition+RightWheelPosition)/2;
 
     //potential
-    error =desiredValue - averagePosition;
+    error = desiredValue - averagePosition;
 
     //derivative
-    derivative = error - prevError;
+    derivative = prevError - error;
 
     //velocity > position > absement(position*time)
     totalError += error;
 
-    double lateralMotorPower = (error * kP + derivative * kD); //+ totalError * kI); Doesnt work well
+    double lateralMotorPower = ((error * kP) + (derivative * kD) + (totalError * kI)); 
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ int drivePID(){
     int turnDifference = (LeftWheelPosition - RightWheelPosition);
 
     //potential
-    turnError = turnDifference - desiredTurnValue;
+    turnError = desiredTurnValue + turnDifference;
 
     //derivative
     turnDerivative = turnError - turnPrevError;
@@ -123,10 +123,94 @@ int drivePID(){
 
     prevError = error;
     turnPrevError = turnError;
-    vex::task::sleep(20);
+    wait(20, msec);
   }
 
   return 1;
+}
+
+void pLoopRight(float degs){
+  Inertial5.setHeading(0,degrees);
+    while (Inertial5.heading(degrees)<degs){
+    turnError = degs - Inertial5.heading(degrees);
+    float MotorPower = turnError * turnkP;
+
+    fL.spin(forward, MotorPower, percent);
+    bL.spin(forward, MotorPower, percent);
+    fR.spin(reverse, MotorPower, percent);
+    bR.spin(reverse, MotorPower, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
+void pLoopLeft(float degs){
+  Inertial5.setHeading(359,degrees);
+    while (Inertial5.heading(degrees)>degs){
+    turnError = degs - Inertial5.heading(degrees);
+    float MotorPower = turnError * turnkP;
+
+    fL.spin(reverse, MotorPower, percent);
+    bL.spin(reverse, MotorPower, percent);
+    fR.spin(forward, MotorPower, percent);
+    bR.spin(forward, MotorPower, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
+void pLoopForward(float degs){
+  Inertial5.setHeading(0,degrees);
+    while (Inertial5.heading(degrees)<degs){
+    error = degs - Inertial5.heading(degrees);
+    float MotorPower = error * kP;
+
+    fL.spin(forward, MotorPower, percent);
+    bL.spin(forward, MotorPower, percent);
+    fR.spin(forward, MotorPower, percent);
+    bR.spin(forward, MotorPower, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
+void pLoopReverse(float degs){
+  Inertial5.setHeading(0,degrees);
+    while (Inertial5.heading(degrees)<degs){
+    error = degs - Inertial5.heading(degrees);
+    float MotorPower = error * kP;
+
+    fL.spin(forward, MotorPower, percent);
+    bL.spin(forward, MotorPower, percent);
+    fR.spin(reverse, MotorPower, percent);
+    bR.spin(reverse, MotorPower, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
 }
 
 void rollerMech(){
@@ -140,7 +224,7 @@ void rollerMech(){
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-
+  Inertial5.calibrate();
   Controller1.Screen.print(LeftSide.rotation(degrees));
   Controller1.Screen.print(RightSide.rotation(degrees));
 
@@ -184,10 +268,10 @@ void usercontrol(void) {
     int sidewayscontroller= Controller1.Axis4.position(percent);
     int turncontroller= Controller1.Axis1.position(percent);
 
-fR.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
-fL.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
-bR.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
-bL.spin(forward, forwardcontroller-sidewayscontroller-turncontroller, percent);
+fR.spin(forward, forwardcontroller-sidewayscontroller-turncontroller, percent);
+fL.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
+bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
+bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
  
     // Get the velocity percentage of the left motor. (Axis3 + Axis4)
