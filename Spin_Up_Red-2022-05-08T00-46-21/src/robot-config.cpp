@@ -14,13 +14,12 @@ motor fR = motor(PORT1, ratio6_1, false);
 motor bR = motor(PORT10, ratio6_1, false);
 inertial Inertial5 = inertial(PORT5);
 motor RollerWheel = motor(PORT7, ratio18_1, false);
-/*vex-vision-config:begin*/
-vision Vision6 = vision (PORT6, 50);
-/*vex-vision-config:end*/
 encoder RightSide = encoder(Brain.ThreeWirePort.A);
 encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);
 controller Controller1 = controller(primary);
+motor Intake = motor(PORT13, ratio18_1, true);
+optical Optical6 = optical(PORT6);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

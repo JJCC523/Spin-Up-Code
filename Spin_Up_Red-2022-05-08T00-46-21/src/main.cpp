@@ -16,11 +16,12 @@
 // bR                   motor         10              
 // Inertial5            inertial      5               
 // RollerWheel          motor         7               
-// Vision6              vision        6               
 // RightSide            encoder       A, B            
 // LeftSide             encoder       C, D            
 // BackSide             encoder       E, F            
 // Controller1          controller                    
+// Intake               motor         13              
+// Optical6             optical       6               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -130,7 +131,7 @@ int drivePID(){
 }
 
 void pLoopRight(float degs){
-  Inertial5.setHeading(0,degrees);
+  Inertial5.setHeading(1,degrees);
     while (Inertial5.heading(degrees)<degs){
     turnError = degs - Inertial5.heading(degrees);
     float MotorPower = turnError * turnkP;
@@ -172,9 +173,10 @@ void pLoopLeft(float degs){
 }
 
 void pLoopForward(float degs){
-  Inertial5.setHeading(0,degrees);
-    while (Inertial5.heading(degrees)<degs){
-    error = degs - Inertial5.heading(degrees);
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+    while (RightSide.position(degrees)&&LeftSide.position(degrees)<degs){
+    error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
     fL.spin(forward, MotorPower, percent);
@@ -193,9 +195,10 @@ void pLoopForward(float degs){
 }
 
 void pLoopReverse(float degs){
-  Inertial5.setHeading(0,degrees);
-    while (Inertial5.heading(degrees)<degs){
-    error = degs - Inertial5.heading(degrees);
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+    while (RightSide.position(degrees)&&LeftSide.position(degrees)>(degs*-1)){
+    error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
     fL.spin(forward, MotorPower, percent);
@@ -213,12 +216,13 @@ void pLoopReverse(float degs){
     bR.setStopping(hold);
 }
 
-void rollerMech(){
-  while(!Vision6.takeSnapshot(Vision6__RED_ROLLER) & Vision6.takeSnapshot(Vision6__BLUE_ROLLER) or Vision6.takeSnapshot(Vision6__RED_ROLLER) & Vision6.takeSnapshot(Vision6__BLUE_ROLLER)){
-    RollerWheel.spin(forward);
-  }
-  RollerWheel.stop();
-}
+//void rollerMech(){
+  //while(!Vision6.takeSnapshot(Vision6__RED_ROLLER) & Vision6.takeSnapshot(Vision6__BLUE_ROLLER) or Vision6.takeSnapshot(Vision6__RED_ROLLER) & Vision6.takeSnapshot(Vision6__BLUE_ROLLER)){
+    //RollerWheel.spin(forward);
+  //}
+  //RollerWheel.stop();
+//}
+
 
 
 void pre_auton(void) {
@@ -257,6 +261,7 @@ void usercontrol(void) {
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
   int deadband = 5;
+  int takein=2;
 
   while (true) {
     fL.setStopping(hold);
@@ -273,61 +278,22 @@ fL.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
 bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
 bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
- 
-    // Get the velocity percentage of the left motor. (Axis3 + Axis4)
-    /*int leftMotorSpeed =
-        Controller1.Axis3.position() + Controller1.Axis1.position();
-    // Get the velocity percentage of the right motor. (Axis3 - Axis4)
-    int rightMotorSpeed =
-        Controller1.Axis3.position() - Controller1.Axis1.position();
-    int sideways =
-        Controller1.Axis4.position();
-
-    // Set the speed of the left motor. If the value is less than the deadband,
-    // set it to zero.
-    if (abs(leftMotorSpeed) < deadband) {
-      // Set the speed to zero.
-      fL.setVelocity(0, percent);
-      bL.setVelocity(0, percent);
-    } else {
-      // Set the speed to leftMotorSpeed
-      fL.setVelocity(leftMotorSpeed+sideways, percent);
-      bL.setVelocity(leftMotorSpeed - sideways, percent);
-
+    if(Controller1.ButtonDown.pressing()){
+      if(takein < 2){
+        takein=takein+1;
+      }
+      if(takein >= 2){
+        takein = 1;
+      }
     }
-
-    // Set the speed of the right motor. If the value is less than the deadband,
-    // set it to zero. 
-    if (abs(rightMotorSpeed) < deadband) {
-      // Set the speed to zero
-      fR.setVelocity(0, percent);
-      bR.setVelocity(0, percent);
-    } else {
-      // Set the speed to rightMotorSpeed
-      fR.setVelocity(rightMotorSpeed - sideways, percent);
-      bR.setVelocity(rightMotorSpeed + sideways, percent);
-    }*/
-
-    /*if (abs(sideways) < deadband) {
-      // Set the speed to zero.
-      fL.setVelocity(0, percent);
-      bL.setVelocity(0, percent);
-      fR.setVelocity(0, percent);
-      bR.setVelocity(0, percent);
-    } else {
-      // Set the speed to leftMotorSpeed
-      fL.setVelocity(sideways, percent);
-      bR.setVelocity(sideways, percent);
-      fR.setVelocity((sideways*-1), percent);
-      bL.setVelocity((sideways*-1), percent);
-
-    }*/
-
-    // Spin both motors in the forward direction.
-    //fL.spin(forward);
-    //fR.spin(forward);
-    //bL.spin(forward);
-    //bR.spin(forward);
+   
+    if(takein = 1){
+      Intake.spin(forward, 100, percent);
+    }
+    if(takein = 2){
+      Intake.stop();
+      Intake.setStopping(hold);
+    }
     wait(25, msec);
   }
 
