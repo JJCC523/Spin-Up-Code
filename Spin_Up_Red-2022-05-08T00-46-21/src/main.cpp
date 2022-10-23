@@ -21,7 +21,7 @@
 // BackSide             encoder       E, F            
 // Controller1          controller                    
 // Intake               motor         13              
-// Optical6             optical       6               
+// Optical4             optical       4               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -220,7 +220,7 @@ void pLoopReverse(float degs){
 }
 
 void detectRed(){
-  while(Optical6.hue() < 240 && Optical6.hue() > 221){
+  while(Optical4.hue() < 240 && Optical4.hue() > 221){
       Intake.spin(forward, 100, percent);
   }
   Intake.stop();
@@ -233,8 +233,23 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   Inertial5.calibrate();
-  Controller1.Screen.print(LeftSide.rotation(degrees));
-  Controller1.Screen.print(RightSide.rotation(degrees));
+  while(true){
+    Controller1.Screen.setCursor(1,1);
+    if (Optical4.color() == red) {
+  Controller1.Screen.print("Red object detected!");
+}
+  if (Optical4.color() == blue) {
+  Controller1.Screen.print("Blue object detected!");
+}
+wait(1000,msec);
+  Controller1.Screen.clearScreen();
+wait (250, msec);
+  }
+  
+    wait(20,msec);
+    takein=2;
+  //Controller1.Screen.print(LeftSide.rotation(degrees));
+  //Controller1.Screen.print(RightSide.rotation(degrees));
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
@@ -262,6 +277,7 @@ void autonomous(void) {
 
 void usercontrol(void) {
   enableDrivePID= false;
+    int takein = 2;
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
   int deadband = 5;
@@ -283,12 +299,25 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
     if(Controller1.ButtonDown.pressing()){
       if(takein == 1){
         takein=takein+1;
+        wait(100,msec);
       }
-      if(takein >= 2){
+      if(takein != 1){
         takein = 1;
+        wait(100,msec);
       }
+      wait(20,msec);
     }
    
+    if(Controller1.ButtonLeft.pressing()){
+      takein=2;
+    }
+
+    if(Controller1.ButtonA.pressing()){ 
+      while(Optical4.color() == red){
+      Intake.spin(forward, 50, percent);
+      }   
+    takein = 2;
+    }
     if(takein == 1){
       Intake.spin(forward, 100, percent);
     }
@@ -296,20 +325,15 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       Intake.stop();
       Intake.setStopping(hold); 
     }
+    
+    if(Controller1.ButtonY.pressing()){
+      takein=3;
+    }
     if(takein == 3){
       Intake.spin(reverse, 100, percent); 
     }
 
-    if(Controller1.ButtonA.pressing()){
-      while(Optical6.hue() < 240 && Optical6.hue() > 221){
-      Intake.spin(forward, 100, percent);
-      }   
-    takein = 2;
-    }
 
-    if(Controller1.ButtonY.pressing()){
-      takein=3;
-    }
 
 
     wait(25, msec);

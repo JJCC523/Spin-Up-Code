@@ -14,7 +14,7 @@ extern encoder LeftSide;
 extern encoder BackSide;
 extern controller Controller1;
 extern motor Intake;
-extern optical Optical6;
+extern optical Optical4;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

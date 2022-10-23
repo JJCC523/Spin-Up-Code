@@ -19,7 +19,7 @@ encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);
 controller Controller1 = controller(primary);
 motor Intake = motor(PORT13, ratio18_1, true);
-optical Optical6 = optical(PORT6);
+optical Optical4 = optical(PORT4);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
