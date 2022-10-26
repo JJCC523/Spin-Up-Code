@@ -15,13 +15,14 @@
 // fR                   motor         1               
 // bR                   motor         10              
 // Inertial5            inertial      5               
-// RollerWheel          motor         7               
+// Indexer              motor         7               
 // RightSide            encoder       A, B            
 // LeftSide             encoder       C, D            
 // BackSide             encoder       E, F            
 // Controller1          controller                    
 // Intake               motor         13              
 // Optical4             optical       4               
+// Flywheel             motor_group   18, 19          
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -219,14 +220,23 @@ void pLoopReverse(float degs){
     bR.setStopping(hold);
 }
 
-void detectRed(){
-  while(Optical4.hue() < 240 && Optical4.hue() > 221){
-      Intake.spin(forward, 100, percent);
-  }
+void detectBlue_forRed(){
+  while(Optical4.color() == red){
+      Intake.spin(forward, 50, percent);
+      }
   Intake.stop();
   takein = 2;
 }
 
+void shootdiscs(int discs){
+  int discs_shot = 0;
+    while(discs_shot < discs){
+      Flywheel.spin(forward, 100, percent);
+      wait(1,seconds);
+      Indexer.spinFor(forward,360,degrees);
+      discs_shot = discs_shot+1;
+    }
+}
 
 
 void pre_auton(void) {
@@ -248,8 +258,7 @@ wait (250, msec);
   
     wait(20,msec);
     takein=2;
-  //Controller1.Screen.print(LeftSide.rotation(degrees));
-  //Controller1.Screen.print(RightSide.rotation(degrees));
+  
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
@@ -278,6 +287,7 @@ void autonomous(void) {
 void usercontrol(void) {
   enableDrivePID= false;
     int takein = 2;
+
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
   int deadband = 5;
@@ -333,7 +343,9 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       Intake.spin(reverse, 100, percent); 
     }
 
-
+    if(Controller1.ButtonX.pressing()){
+      Indexer.spinFor(forward,360,degrees);
+    }
 
 
     wait(25, msec);

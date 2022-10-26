@@ -8,13 +8,14 @@ extern motor bL;
 extern motor fR;
 extern motor bR;
 extern inertial Inertial5;
-extern motor RollerWheel;
+extern motor Indexer;
 extern encoder RightSide;
 extern encoder LeftSide;
 extern encoder BackSide;
 extern controller Controller1;
 extern motor Intake;
 extern optical Optical4;
+extern motor_group Flywheel;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
