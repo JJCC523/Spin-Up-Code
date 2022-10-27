@@ -15,14 +15,14 @@
 // fR                   motor         1               
 // bR                   motor         10              
 // Inertial5            inertial      5               
-// Indexer              motor         7               
+// Indexer              motor         21              
 // RightSide            encoder       A, B            
 // LeftSide             encoder       C, D            
 // BackSide             encoder       E, F            
 // Controller1          controller                    
 // Intake               motor         13              
 // Optical4             optical       4               
-// Flywheel             motor_group   18, 19          
+// flywheel             motor_group   7, 8            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -231,7 +231,7 @@ void detectBlue_forRed(){
 void shootdiscs(int discs){
   int discs_shot = 0;
     while(discs_shot < discs){
-      Flywheel.spin(forward, 100, percent);
+      flywheel.spin(forward, 100, percent);
       wait(1,seconds);
       Indexer.spinFor(forward,360,degrees);
       discs_shot = discs_shot+1;
@@ -341,12 +341,15 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
     }
     if(takein == 3){
       Intake.spin(reverse, 100, percent); 
-    }
+    } 
 
     if(Controller1.ButtonX.pressing()){
       Indexer.spinFor(forward,360,degrees);
-    }
+    } 
 
+    if(Controller1.ButtonUp.pressing()){
+      flywheel.spin(forward, 100, percent);
+    }
 
     wait(25, msec);
   }

@@ -15,7 +15,7 @@ extern encoder BackSide;
 extern controller Controller1;
 extern motor Intake;
 extern optical Optical4;
-extern motor_group Flywheel;
+extern motor_group flywheel;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
