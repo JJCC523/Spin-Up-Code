@@ -251,7 +251,8 @@ void pre_auton(void) {
   if (Optical4.color() == blue) {
   Controller1.Screen.print("Blue object detected!");
 }
-wait(1000,msec);
+Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm));
+wait(1000,msec); 
   Controller1.Screen.clearScreen();
 wait (250, msec);
   }

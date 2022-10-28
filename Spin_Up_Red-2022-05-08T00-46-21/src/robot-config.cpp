@@ -20,8 +20,8 @@ encoder BackSide = encoder(Brain.ThreeWirePort.E);
 controller Controller1 = controller(primary);
 motor Intake = motor(PORT13, ratio18_1, true);
 optical Optical4 = optical(PORT4);
-motor flywheelMotorA = motor(PORT7, ratio18_1, false);
-motor flywheelMotorB = motor(PORT8, ratio18_1, false);
+motor flywheelMotorA = motor(PORT7, ratio6_1, false);
+motor flywheelMotorB = motor(PORT8, ratio6_1, false);
 motor_group flywheel = motor_group(flywheelMotorA, flywheelMotorB);
 
 // VEXcode generated functions
