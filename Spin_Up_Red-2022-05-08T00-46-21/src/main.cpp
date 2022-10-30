@@ -15,7 +15,6 @@
 // fR                   motor         1               
 // bR                   motor         10              
 // Inertial5            inertial      5               
-// Indexer              motor         21              
 // RightSide            encoder       A, B            
 // LeftSide             encoder       C, D            
 // BackSide             encoder       E, F            
@@ -233,7 +232,6 @@ void shootdiscs(int discs){
     while(discs_shot < discs){
       flywheel.spin(forward, 100, percent);
       wait(1,seconds);
-      Indexer.spinFor(forward,360,degrees);
       discs_shot = discs_shot+1;
     }
 }
@@ -289,6 +287,8 @@ void usercontrol(void) {
   enableDrivePID= false;
     int takein = 2;
 
+    vex::digital_out Indexer = vex::digital_out(Brain.ThreeWirePort.G);
+
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
   int deadband = 5;
@@ -309,7 +309,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
     if(Controller1.ButtonDown.pressing()){
       if(takein == 1){
-        takein=takein+1;
+        takein=2;
         wait(100,msec);
       }
       if(takein != 1){
@@ -323,7 +323,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       takein=2;
     }
 
-    if(Controller1.ButtonA.pressing()){ 
+    if(Controller1.ButtonRight.pressing()){ 
       while(Optical4.color() == red){
       Intake.spin(forward, 50, percent);
       }   
@@ -337,19 +337,22 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       Intake.setStopping(hold); 
     }
     
-    if(Controller1.ButtonY.pressing()){
+    if(Controller1.ButtonLeft.pressing()){
       takein=3;
     }
     if(takein == 3){
       Intake.spin(reverse, 100, percent); 
     } 
 
-    if(Controller1.ButtonX.pressing()){
-      Indexer.spinFor(forward,360,degrees);
-    } 
+    if(Controller1.ButtonB.pressing()){
+      Indexer = 1;
+      wait(100,msec);
+      Indexer = 0;
+    }  
 
-    if(Controller1.ButtonUp.pressing()){
+    if(Controller1.ButtonY.pressing()){
       flywheel.spin(forward, 100, percent);
+      wait(20,msec);
     }
 
     wait(25, msec);

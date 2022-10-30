@@ -13,7 +13,6 @@ motor bL = motor(PORT9, ratio6_1, true);
 motor fR = motor(PORT1, ratio6_1, false);
 motor bR = motor(PORT10, ratio6_1, false);
 inertial Inertial5 = inertial(PORT5);
-motor Indexer = motor(PORT21, ratio18_1, false);
 encoder RightSide = encoder(Brain.ThreeWirePort.A);
 encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);

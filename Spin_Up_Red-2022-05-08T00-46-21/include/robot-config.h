@@ -8,7 +8,6 @@ extern motor bL;
 extern motor fR;
 extern motor bR;
 extern inertial Inertial5;
-extern motor Indexer;
 extern encoder RightSide;
 extern encoder LeftSide;
 extern encoder BackSide;
