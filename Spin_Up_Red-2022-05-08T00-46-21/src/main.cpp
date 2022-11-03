@@ -244,13 +244,15 @@ void pre_auton(void) {
   while(true){
     Controller1.Screen.setCursor(1,1);
     if (Optical4.color() == red) {
-  Controller1.Screen.print("Red object detected!");
+  Controller1.Screen.print("Red object detected!");  
 }
   if (Optical4.color() == blue) {
   Controller1.Screen.print("Blue object detected!");
 }
-Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm));
-wait(1000,msec); 
+Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
+Controller1.Screen.setCursor(3,1);
+Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+wait(100,msec); 
   Controller1.Screen.clearScreen();
 wait (250, msec);
   }
@@ -319,7 +321,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       wait(20,msec);
     }
    
-    if(Controller1.ButtonLeft.pressing()){
+    if(Controller1.ButtonL1.pressing()){
       takein=2;
     }
 
@@ -352,6 +354,11 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
     if(Controller1.ButtonY.pressing()){
       flywheel.spin(forward, 100, percent);
+      wait(20,msec);
+    }
+
+    if(Controller1.ButtonX.pressing()){
+      flywheel.stop();
       wait(20,msec);
     }
 
