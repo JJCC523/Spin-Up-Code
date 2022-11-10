@@ -283,7 +283,7 @@ void autonomous(void) {
   wait(500,msec); 
   Intake.stop();
   wait(100, msec);
-  detectBlue_forRed();
+  detectBlue_forRed();  
   DR(75);
   TR(177);
   shootdiscs(2);
