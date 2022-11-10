@@ -9,6 +9,7 @@ brain  Brain;
 
 // VEXcode device constructors
 motor fL = motor(PORT2, ratio6_1, true);
+digital_out Indexer = digital_out(Brain.ThreeWirePort.G);
 motor bL = motor(PORT9, ratio6_1, true);
 motor fR = motor(PORT1, ratio6_1, false);
 motor bR = motor(PORT10, ratio6_1, false);

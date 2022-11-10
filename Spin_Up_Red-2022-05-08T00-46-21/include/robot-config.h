@@ -13,6 +13,7 @@ extern encoder LeftSide;
 extern encoder BackSide;
 extern controller Controller1;
 extern motor Intake;
+extern digital_out Indexer;
 extern optical Optical4;
 extern motor_group flywheel;
 

@@ -133,16 +133,14 @@ int drivePID(){
   return 1;
 }
 
-void pLoopRight(float degs){
-  Inertial5.setHeading(1,degrees);
+void TR(float degs){
+  Inertial5.setHeading(5, degrees);
     while (Inertial5.heading(degrees)<degs){
-    turnError = degs - Inertial5.heading(degrees);
-    float MotorPower = turnError * turnkP;
 
-    fL.spin(forward, MotorPower, percent);
-    bL.spin(forward, MotorPower, percent);
-    fR.spin(reverse, MotorPower, percent);
-    bR.spin(reverse, MotorPower, percent);
+    fL.spin(forward, 70, percent);
+    bL.spin(forward, 70, percent);
+    fR.spin(reverse, 70, percent);
+    bR.spin(reverse, 70, percent);
     }
     fL.stop();
     fR.stop();
@@ -154,16 +152,14 @@ void pLoopRight(float degs){
     bR.setStopping(hold);
 }
 
-void pLoopLeft(float degs){
-  Inertial5.setHeading(359,degrees);
+void TL(float degs){
+  Inertial5.resetHeading();
     while (Inertial5.heading(degrees)>degs){
-    turnError = degs - Inertial5.heading(degrees);
-    float MotorPower = turnError * turnkP;
 
-    fL.spin(reverse, MotorPower, percent);
-    bL.spin(reverse, MotorPower, percent);
-    fR.spin(forward, MotorPower, percent);
-    bR.spin(forward, MotorPower, percent);
+    fL.spin(reverse, 10, percent);
+    bL.spin(reverse, 10, percent);
+    fR.spin(forward, 10, percent);
+    bR.spin(forward, 10, percent);
     }
     fL.stop();
     fR.stop();
@@ -175,17 +171,18 @@ void pLoopLeft(float degs){
     bR.setStopping(hold);
 }
 
-void pLoopForward(float degs){
+void DF(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
-    while (RightSide.position(degrees)&&LeftSide.position(degrees)<degs){
+  fL.resetPosition();
+    while (fL.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
-    fL.spin(forward, MotorPower, percent);
-    bL.spin(forward, MotorPower, percent);
-    fR.spin(forward, MotorPower, percent);
-    bR.spin(forward, MotorPower, percent);
+    fL.spin(forward, 100, percent);
+    bL.spin(forward, 100, percent);
+    fR.spin(forward, 100, percent);
+    bR.spin(forward, 100, percent);
     }
     fL.stop();
     fR.stop();
@@ -197,17 +194,18 @@ void pLoopForward(float degs){
     bR.setStopping(hold);
 }
 
-void pLoopReverse(float degs){
+void DR(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
-    while (RightSide.position(degrees)&&LeftSide.position(degrees)>(degs*-1)){
+  fL.resetPosition();
+    while (fL.position(degrees)>(degs*-1)){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
-    fL.spin(forward, MotorPower, percent);
-    bL.spin(forward, MotorPower, percent);
-    fR.spin(reverse, MotorPower, percent);
-    bR.spin(reverse, MotorPower, percent);
+    fL.spin(reverse, 100, percent);
+    bL.spin(reverse, 100, percent);
+    fR.spin(reverse, 100, percent);
+    bR.spin(reverse, 100, percent);
     }
     fL.stop();
     fR.stop();
@@ -231,7 +229,10 @@ void shootdiscs(int discs){
   int discs_shot = 0;
     while(discs_shot < discs){
       flywheel.spin(forward, 100, percent);
-      wait(1,seconds);
+      wait(2,seconds);
+      Indexer = 1;
+      wait(100,msec);
+      Indexer = 0;
       discs_shot = discs_shot+1;
     }
 }
@@ -241,6 +242,7 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   Inertial5.calibrate();
+  wait(3,seconds);
   while(true){
     Controller1.Screen.setCursor(1,1);
     if (Optical4.color() == red) {
@@ -252,6 +254,8 @@ void pre_auton(void) {
 Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
 Controller1.Screen.setCursor(3,1);
 Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+Controller1.Screen.setCursor(2,1);
+Controller1.Screen.print("Heading:%f",Inertial5.heading(degrees));
 wait(100,msec); 
   Controller1.Screen.clearScreen();
 wait (250, msec);
@@ -274,14 +278,15 @@ void autonomous(void) {
     desiredTurnValue = number
 
   */
-  resetDriveSensors = true;
-  vex::task PID(drivePID);
-  resetDriveSensors = true;
-  desiredValue = 100;
-  desiredTurnValue = 0;
-
-
-
+  DF(75);
+  Intake.spin(forward, 50,percent);
+  wait(500,msec); 
+  Intake.stop();
+  wait(100, msec);
+  detectBlue_forRed();
+  DR(75);
+  TR(177);
+  shootdiscs(2);
 }
 
 
@@ -289,7 +294,7 @@ void usercontrol(void) {
   enableDrivePID= false;
     int takein = 2;
 
-    vex::digital_out Indexer = vex::digital_out(Brain.ThreeWirePort.G);
+    
 
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
