@@ -318,15 +318,24 @@ if(PosRight.pressed()){
 if(c == 1 && p == 1){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("1");
 
   }
 if(c == 1 && p == 2){
       Brain.Screen.setCursor(1, 36);
-      Brain.Screen.print("Red ");
+      Brain.Screen.print("Red");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Right Side");
       Brain.Screen.setCursor(3,36);
@@ -337,7 +346,10 @@ if(c == 2 && p == 1){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
-      Brain.Screen.print("Left Side ");
+      Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("1");
 
