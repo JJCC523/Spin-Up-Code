@@ -267,16 +267,16 @@ void pre_auton(void) {
     Controller1.Screen.setCursor(1,1);
     if (Optical4.color() == red) {
   Controller1.Screen.print("Red object detected!");  
-}
+  }
   if (Optical4.color() == blue) {
   Controller1.Screen.print("Blue object detected!");
-}
-Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
-Controller1.Screen.setCursor(3,1);
-Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
-Controller1.Screen.setCursor(2,1);
-Controller1.Screen.print("Heading:%f",Inertial5.heading(degrees));
-wait(50,msec); 
+  }
+  Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
+  Controller1.Screen.setCursor(3,1);
+  Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print("Heading:%f",Inertial5.heading(degrees));
+  wait(50,msec); 
   Controller1.Screen.clearScreen();
   gui::thatthingyoupress RedSide(5,5);
   Brain.Screen.setCursor(4,2);
@@ -296,28 +296,28 @@ wait(50,msec);
   Brain.Screen.print("Side:");
   Brain.Screen.setCursor(3,30);
   Brain.Screen.print("Auton:");
-if(RedSide.pressed()){
+  if(RedSide.pressed()){
   while(RedSide.pressed()){
     wait(10,msec);
   }
   if(c != 1)
   c=1;
-}
-if(BlueSide.pressed()){
+  }
+  if(BlueSide.pressed()){
   while(BlueSide.pressed()){
     wait(10,msec);
   }
   if(c != 2)
   c=2;
-}
-if(PosLeft.pressed()){
+  }
+  if(PosLeft.pressed()){
   while(PosLeft.pressed()){
     wait(10,msec);
   }
   if(p != 1)
   p=1;
-}
-if(p==1){
+  }
+  if(p==1){
   Brain.Screen.setFillColor(black);
   Brain.Screen.setPenColor(black);
   Brain.Screen.drawRectangle(195, 100, 210, 150);
@@ -337,23 +337,23 @@ if(p==1){
   }
   if(a != 1)
   a=1;
-}
-if(Auto2.pressed()){
+  }
+  if(Auto2.pressed()){
   while(Auto2.pressed()){
     wait(10,msec);
   }
   if(a != 2)
   a=2;
-}
-if(Auto3.pressed()){
+  }
+  if(Auto3.pressed()){
   while(Auto3.pressed()){
     wait(10,msec);
   }
   if(a != 3)
   a=3;
-}
-}
-if(p==2){
+  }
+  }
+  if(p==2){
   Brain.Screen.setFillColor(black);
   Brain.Screen.setPenColor(black);
   Brain.Screen.drawRectangle(195, 100, 210, 150);
@@ -370,24 +370,24 @@ if(p==2){
   }
   if(a != 4)
   a=4;
-}
-if(Auto2.pressed()){
+  }
+  if(Auto2.pressed()){
   while(Auto2.pressed()){
     wait(10,msec);
   }
   if(a != 5)
   a=5;
-}
-}
-if(PosRight.pressed()){
+  }
+  }
+  if(PosRight.pressed()){
   while(PosRight.pressed()){
     wait(10,msec);
   }
   if(p != 2)
   p=2;
 
-}
-if(c == 1 && p == 1 && a == 1){
+  }
+  if(c == 1 && p == 1 && a == 1){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -399,10 +399,10 @@ if(c == 1 && p == 1 && a == 1){
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("1");
+      Brain.Screen.print("Full WP");
 
   }
-if(c == 1 && p == 1 && a == 2){
+  if(c == 1 && p == 1 && a == 2){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -413,11 +413,15 @@ if(c == 1 && p == 1 && a == 2){
       Brain.Screen.setPenColor(black);
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
+      Brain.Screen.setPenColor(white); 
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("2");
 
   }
-if(c == 1 && p == 1 && a == 3){
+  if(c == 1 && p == 1 && a == 3){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -427,12 +431,16 @@ if(c == 1 && p == 1 && a == 3){
       Brain.Screen.print("Left Side");
       Brain.Screen.setPenColor(black);
       Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("3");
 
   }
-if(c == 1 && p == 2 && a == 4){
+  if(c == 1 && p == 2 && a == 4){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -465,10 +473,10 @@ if(c == 1 && p == 2 && a == 4){
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("1");
+      Brain.Screen.print("Full WP");
 
   }
-if(c == 2 && p == 1 && a == 2){
+  if(c == 2 && p == 1 && a == 2){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
@@ -477,40 +485,56 @@ if(c == 2 && p == 1 && a == 2){
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
       Brain.Screen.print("2");
 
   }
-if(c == 2 && p == 1 && a == 3){
+  if(c == 2 && p == 1 && a == 3){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Left Side");
       Brain.Screen.setPenColor(black); 
       Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("3");
 
   }
-if(c == 2 && p == 2 && a == 4){
+  if(c == 2 && p == 2 && a == 4){
       Brain.Screen.setCursor(1, 36); 
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Right Side");
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
+      Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
       Brain.Screen.print("1");
 
   }
-if(c == 2 && p == 2 && a == 5){
+  if(c == 2 && p == 2 && a == 5){
       Brain.Screen.setCursor(1, 36); 
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Right Side");
       Brain.Screen.setCursor(3,36);
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("Full WP");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
       Brain.Screen.print("2");
 
   }
-gui::thatthingyoupress LockIn(425,170); 
+  gui::thatthingyoupress LockIn(425,170); 
   Brain.Screen.setCursor(50,42);
   Brain.Screen.print("Lock In");
   if(LockIn.pressed()){
@@ -520,7 +544,7 @@ gui::thatthingyoupress LockIn(425,170);
   if(f != 1)
   f=1;
   }
-if(f == 1){
+  if(f == 1){
   Brain.Screen.setFillColor(black);
   Brain.Screen.setPenColor(black);
   Brain.Screen.drawRectangle(0, 0, 500, 500);
@@ -559,8 +583,8 @@ if(f == 1){
     Brain.Screen.setCursor(3,36);
     Brain.Screen.print("2");
   }
-}
-wait (250, msec);
+  }
+  wait (250, msec);
   }
   
     wait(20,msec);
@@ -573,7 +597,7 @@ wait (250, msec);
 
 
 
-void autonomous(void) {
+void autonomous(void) { 
 //Left Side
   if(p == 1 && a == 1){
   DF(75);
@@ -585,6 +609,20 @@ void autonomous(void) {
   DR(75);
   TR(176);
   shootdiscs(2);
+  //above is tested
+  TR(225);
+  Intake.spin(forward, 100, percent);
+  DF(200);
+  TL(180);
+  shootdiscs(3);
+  TR(225);
+  Intake.spin(forward, 100, percent);
+  DF(1000);
+  TL(125);
+  shootdiscs(3);
+  TR(225);
+  DF(200);
+  TR(270);
   }
   if(p == 1 && a == 2){
   
