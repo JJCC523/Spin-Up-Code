@@ -34,7 +34,10 @@ competition Competition;
 
 // define your global instances of motors and other devices here
 
-
+int c = 0;
+int p = 0;
+int a = 0;
+int f = 0;
 
 //settings
 double kP = 0.009;
@@ -227,12 +230,21 @@ void DR(float degs){
     bR.setStopping(hold);
 }
 
-void detectBlue_forRed(){
-  while(Optical4.color() == red){
+void RollerMech(){
+  if (c == 1){
+    while(Optical4.color() == red){
       Intake.spin(forward, 50, percent);
       }
   Intake.stop();
   takein = 2;
+  }
+  if (c == 2){
+    while(Optical4.color() == blue){
+      Intake.spin(forward, 50, percent);
+      }
+  Intake.stop();
+  takein = 2;
+  }
 }
 
 void shootdiscs(int discs){
@@ -246,9 +258,6 @@ void shootdiscs(int discs){
       discs_shot = discs_shot+1;
     }
 }
-int auton = 0;
-int c = 0;
-int p = 0;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
@@ -308,14 +317,77 @@ if(PosLeft.pressed()){
   if(p != 1)
   p=1;
 }
+if(p==1){
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.drawRectangle(195, 100, 210, 150);
+  Brain.Screen.setPenColor(white);
+  gui::thatthingyoupress Auto1(200,100); 
+  Brain.Screen.setCursor(9,21);
+  Brain.Screen.print("Auto 1");
+  gui::thatthingyoupress Auto2(270,100); 
+  Brain.Screen.setCursor(9,28);
+  Brain.Screen.print("Auto 2");
+  gui::thatthingyoupress Auto3(340,100); 
+  Brain.Screen.setCursor(9,35);
+  Brain.Screen.print("Auto 3");
+  if(Auto1.pressed()){
+  while(Auto1.pressed()){
+    wait(10,msec);
+  }
+  if(a != 1)
+  a=1;
+}
+if(Auto2.pressed()){
+  while(Auto2.pressed()){
+    wait(10,msec);
+  }
+  if(a != 2)
+  a=2;
+}
+if(Auto3.pressed()){
+  while(Auto3.pressed()){
+    wait(10,msec);
+  }
+  if(a != 3)
+  a=3;
+}
+}
+if(p==2){
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.drawRectangle(195, 100, 210, 150);
+  Brain.Screen.setPenColor(white);
+  gui::thatthingyoupress Auto1(200,100);
+  Brain.Screen.setCursor(9,21);
+  Brain.Screen.print("Auto 1");
+  gui::thatthingyoupress Auto2(270,100); 
+  Brain.Screen.setCursor(9,28);
+  Brain.Screen.print("Auto 2");
+  if(Auto1.pressed()){
+  while(Auto1.pressed()){
+    wait(10,msec);
+  }
+  if(a != 4)
+  a=4;
+}
+if(Auto2.pressed()){
+  while(Auto2.pressed()){
+    wait(10,msec);
+  }
+  if(a != 5)
+  a=5;
+}
+}
 if(PosRight.pressed()){
   while(PosRight.pressed()){
     wait(10,msec);
   }
   if(p != 2)
   p=2;
+
 }
-if(c == 1 && p == 1){
+if(c == 1 && p == 1 && a == 1){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -330,7 +402,37 @@ if(c == 1 && p == 1){
       Brain.Screen.print("1");
 
   }
-if(c == 1 && p == 2){
+if(c == 1 && p == 1 && a == 2){
+      Brain.Screen.setCursor(1, 36);
+      Brain.Screen.print("Red");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("2");
+
+  }
+if(c == 1 && p == 1 && a == 3){
+      Brain.Screen.setCursor(1, 36);
+      Brain.Screen.print("Red");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("3");
+
+  }
+if(c == 1 && p == 2 && a == 4){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Red");
       Brain.Screen.setPenColor(black);
@@ -342,7 +444,19 @@ if(c == 1 && p == 2){
       Brain.Screen.print("1");
 
   }
-if(c == 2 && p == 1){
+  if(c == 1 && p == 2 && a == 5){
+      Brain.Screen.setCursor(1, 36);
+      Brain.Screen.print("Red");
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Right Side");
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("2");
+
+  }
+  if(c == 2 && p == 1 && a == 1){
       Brain.Screen.setCursor(1, 36);
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
@@ -354,7 +468,31 @@ if(c == 2 && p == 1){
       Brain.Screen.print("1");
 
   }
-if(c == 2 && p == 2){
+if(c == 2 && p == 1 && a == 2){
+      Brain.Screen.setCursor(1, 36);
+      Brain.Screen.print("Blue");
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("2");
+
+  }
+if(c == 2 && p == 1 && a == 3){
+      Brain.Screen.setCursor(1, 36);
+      Brain.Screen.print("Blue");
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Left Side");
+      Brain.Screen.setPenColor(black); 
+      Brain.Screen.print("e");
+      Brain.Screen.setPenColor(white);
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("3");
+
+  }
+if(c == 2 && p == 2 && a == 4){
       Brain.Screen.setCursor(1, 36); 
       Brain.Screen.print("Blue");
       Brain.Screen.setCursor(2,36);
@@ -363,7 +501,65 @@ if(c == 2 && p == 2){
       Brain.Screen.print("1");
 
   }
+if(c == 2 && p == 2 && a == 5){
+      Brain.Screen.setCursor(1, 36); 
+      Brain.Screen.print("Blue");
+      Brain.Screen.setCursor(2,36);
+      Brain.Screen.print("Right Side");
+      Brain.Screen.setCursor(3,36);
+      Brain.Screen.print("2");
 
+  }
+gui::thatthingyoupress LockIn(425,170); 
+  Brain.Screen.setCursor(50,42);
+  Brain.Screen.print("Lock In");
+  if(LockIn.pressed()){
+    while(LockIn.pressed()){
+    wait(10,msec);
+  }
+  if(f != 1)
+  f=1;
+  }
+if(f == 1){
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.drawRectangle(0, 0, 500, 500);
+  Brain.Screen.setPenColor(white);
+  Brain.Screen.setCursor(1,30);
+  Brain.Screen.print("Color:");
+  if(c==1){
+    Brain.Screen.setCursor(1,36);
+    Brain.Screen.print("Red");
+  }
+  if(c==2){
+    Brain.Screen.setCursor(1,36);
+    Brain.Screen.print("Blue");
+  }
+  Brain.Screen.setCursor(2,31);
+  Brain.Screen.print("Side:");
+  if(p==1){
+    Brain.Screen.setCursor(2,36);
+    Brain.Screen.print("Left Side");
+  }
+  if(p==2){
+    Brain.Screen.setCursor(2,36);
+    Brain.Screen.print("Right Side");
+  }
+  Brain.Screen.setCursor(3,30);
+  Brain.Screen.print("Auton:");
+  if(a==1 or a==2 or a == 3){
+    Brain.Screen.setCursor(3,36);
+    Brain.Screen.print(a);
+  }
+  if(a==4){
+    Brain.Screen.setCursor(3,36);
+    Brain.Screen.print("1");
+  }
+  if(a==5){
+    Brain.Screen.setCursor(3,36);
+    Brain.Screen.print("2");
+  }
+}
 wait (250, msec);
   }
   
@@ -378,29 +574,41 @@ wait (250, msec);
 
 
 void autonomous(void) {
-  /* always do this
-    resetDriveSensors = true
-    desiredValue = number
-    desiredTurnValue = number
-
-  */
+//Left Side
+  if(p == 1 && a == 1){
   DF(75);
   Intake.spin(forward, 50,percent);
   wait(500,msec); 
   Intake.stop();
   wait(100, msec);
-  detectBlue_forRed();  
+  RollerMech();  
   DR(75);
   TR(176);
   shootdiscs(2);
-
+  }
+  if(p == 1 && a == 2){
+  
+  }
+  if(p == 1 && a == 3){
+  
+  }
+//Right Side & Red
+  if(p == 2 && a == 4){
+  
+  }
+  if(p == 2 && a == 5){
+  
+  }
 }
 
+  
+ 
+int shooter = 0;
 
 void usercontrol(void) {
   enableDrivePID= false;
     int takein = 2;
-
+ 
     
 
   while (1) {
@@ -422,14 +630,16 @@ bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
 bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
     if(Controller1.ButtonDown.pressing()){
-      wait(10,msec);
-      if(takein == 1){
+      
+    while(Controller1.ButtonDown.pressing()){
+        wait(10,msec);
+      }      
+  
+    if(takein == 1){
         takein=2;
-        wait(100,msec);
       }
       if(takein != 1){
         takein = 1;
-        wait(100,msec);
       }
       wait(20,msec);
     }
@@ -439,9 +649,16 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
     }
 
     if(Controller1.ButtonRight.pressing()){ 
-      while(Optical4.color() == red){
-      Intake.spin(forward, 50, percent);
-      }   
+      if(c == 1){
+        while(Optical4.color() == red){
+        Intake.spin(forward, 50, percent);
+      } 
+      }
+      if(c == 2){
+        while(Optical4.color() == blue){
+        Intake.spin(forward, 50, percent);
+      } 
+      }  
     takein = 2;
     }
     if(takein == 1){
@@ -469,7 +686,20 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       flywheel.spin(forward, 100, percent);
       wait(20,msec);
     }
-
+if(Controller1.ButtonY.pressing()){
+      
+    while(Controller1.ButtonY.pressing()){
+        wait(10,msec);
+      }      
+  
+    if(shooter == 1){
+        shooter=2;
+      }
+      if(shooter != 1){
+        shooter = 1;
+      }
+      wait(20,msec);
+    }
     if(Controller1.ButtonX.pressing()){
       flywheel.stop();
       wait(20,msec);
