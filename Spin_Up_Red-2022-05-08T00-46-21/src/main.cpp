@@ -162,17 +162,17 @@ void TR(float degs){
 }
 
 void TL(float degs){
-  Inertial5.resetHeading();
+  Inertial5.setHeading(359, degrees);
   Inertial5.resetRotation();
-    while (Inertial5.heading(degrees)>degs){
+    while (Inertial5.heading(degrees)>(degs*-1)){
 
-    error = degs - Inertial5.rotation(degrees);
+    error = (degs*-1) + Inertial5.rotation(degrees);
     float MotorPower = error * 1.2;
 
-    fL.spin(reverse, MotorPower, percent);
-    bL.spin(reverse, MotorPower, percent);
-    fR.spin(forward, MotorPower, percent);
-    bR.spin(forward, MotorPower, percent);
+    fL.spin(reverse, 50, percent);
+    bL.spin(reverse, 50, percent);
+    fR.spin(forward, 50, percent);
+    bR.spin(forward, 50, percent);
     }
     fL.stop();
     fR.stop();
@@ -187,7 +187,7 @@ void TL(float degs){
 void DF(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
-  fL.resetPosition();
+  fL.setPosition(0, degrees);
     while (fL.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
@@ -228,32 +228,103 @@ void DR(float degs){
     fR.setStopping(hold);
     bL.setStopping(hold);
     bR.setStopping(hold);
+ }
+
+void SR(float degs){
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+  fL.resetPosition();
+    while (fL.position(degrees)<degs){
+    error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
+    float MotorPower = error * kP;
+
+    fL.spin(forward, 100, percent);
+    bL.spin(forward, 100, percent);
+
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
 }
+
+void STR(float degs){
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+  fL.resetPosition();
+    while (fL.position(degrees)<degs){
+    error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
+    float MotorPower = error * kP;
+
+    fL.spin(forward, 100, percent);
+    bL.spin(reverse, 100, percent);
+    fR.spin(reverse, 100, percent);
+    bR.spin(forward, 100, percent);
+
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
+void STL(float degs){
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+  fR.resetPosition();
+    while (fR.position(degrees)<degs){
+    error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
+    float MotorPower = error * kP;
+
+    fL.spin(reverse, 100, percent);
+    bL.spin(forward, 100, percent);
+    fR.spin(forward, 100, percent);
+    bR.spin(reverse, 100, percent);
+
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
 
 void RollerMech(){
   if (c == 1){
-    while(Optical4.color() == red){
+    while(Optical4.color() != blue){
       Intake.spin(forward, 50, percent);
       }
   Intake.stop();
   takein = 2;
   }
   if (c == 2){
-    while(Optical4.color() == blue){
-      Intake.spin(forward, 50, percent);
+    while(Optical4.color() != red){
+      Intake.spin(reverse, 50, percent);
       }
   Intake.stop();
   takein = 2;
   }
 }
 
-void shootdiscs(int discs){
+void shootdiscs(int discs, int flypower){
   int discs_shot = 0;
     while(discs_shot < discs){
       flywheel.spin(forward, 100, percent);
-      wait(2,seconds);
+      wait(1,seconds);
       Indexer = 1;
-      wait(100,msec);
+      wait(200,msec);
       Indexer = 0;
       discs_shot = discs_shot+1;
     }
@@ -449,7 +520,7 @@ void pre_auton(void) {
       Brain.Screen.setCursor(2,36);
       Brain.Screen.print("Right Side");
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("1");
+      Brain.Screen.print("Not WP");
 
   }
   if(c == 1 && p == 2 && a == 5){
@@ -518,7 +589,7 @@ void pre_auton(void) {
       Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("1");
+      Brain.Screen.print("Not WP");
 
   }
   if(c == 2 && p == 2 && a == 5){
@@ -600,29 +671,34 @@ void pre_auton(void) {
 void autonomous(void) { 
 //Left Side
   if(p == 1 && a == 1){
-  DF(75);
-  Intake.spin(forward, 50,percent);
-  wait(500,msec); 
+  flywheel.spin(forward, 100, percent);
+  DF(95);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
-  RollerMech();  
-  DR(75);
-  TR(176);
-  shootdiscs(2);
+  //RollerMech();  
+  DR(80);
+  TR(180);
+  wait(0.5, seconds);
+  shootdiscs(2, 95);
   //above is tested
-  TR(225);
-  Intake.spin(forward, 100, percent);
+  TR(10);
+  Intake.spin(reverse,100,percent);
   DF(200);
-  TL(180);
-  shootdiscs(3);
-  TR(225);
+  TR(53);
+  Intake.spin(forward, 100, percent);
+  DF(4500);
+  TR(265);
+  shootdiscs(3,90);
+  /*TR(45);
   Intake.spin(forward, 100, percent);
   DF(1000);
   TL(125);
   shootdiscs(3);
   TR(225);
   DF(200);
-  TR(270);
+  TR(270);*/
   }
   if(p == 1 && a == 2){
   
@@ -632,7 +708,24 @@ void autonomous(void) {
   }
 //Right Side & Red
   if(p == 2 && a == 4){
-  
+  flywheel.spin(forward, 100, percent);
+  SR(4000);
+  Intake.spin(reverse, 50,percent);
+  wait(0.2, sec);
+  RollerMech();
+  DR(80);
+  TR(190); 
+  wait(0.5, seconds);
+  STR(200);
+  shootdiscs(2,95);
+  STL(500);
+  TR(45);
+  STL(300);
+  Intake.spin(forward, 100,percent);
+  DF(300);
+  DR(200);
+  TL(20);
+  shootdiscs(3, 95);
   }
   if(p == 2 && a == 5){
   
@@ -716,7 +809,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
     if(Controller1.ButtonB.pressing()){
       Indexer = 1;
-      wait(100,msec);
+      wait(300,msec);
       Indexer = 0;
     }  
 
