@@ -162,11 +162,11 @@ void TR(float degs){
 }
 
 void TL(float degs){
-  Inertial5.setHeading(359, degrees);
+  Inertial5.setHeading(358, degrees);
   Inertial5.resetRotation();
-    while (Inertial5.heading(degrees)>(degs*-1)){
+    while (Inertial5.heading(degrees)>(degs)){
 
-    error = (degs*-1) + Inertial5.rotation(degrees);
+    error = (degs) + Inertial5.rotation(degrees);
     float MotorPower = error * 1.2;
 
     fL.spin(reverse, 50, percent);
@@ -489,7 +489,7 @@ void pre_auton(void) {
       Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white); 
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("2");
+      Brain.Screen.print("Half WP");
 
   }
   if(c == 1 && p == 1 && a == 3){
@@ -560,7 +560,7 @@ void pre_auton(void) {
       Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("2");
+      Brain.Screen.print("Half WP");
 
   }
   if(c == 2 && p == 1 && a == 3){
@@ -677,31 +677,47 @@ void autonomous(void) {
   wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
+  RollerMech();  
+  DR(57);
+  TR(186);
+  wait(0.5, seconds); 
+  shootdiscs(2, 90);
+  //above is tested
+  TR(60);
+  Intake.spin(forward, 100, percent);
+  DF(4500);
+  TL(280);
+  shootdiscs(3,85);
+  TR(80);
+  Intake.spin(forward, 100, percent);
+  DF(4000);
+  TL(315);
+  shootdiscs(3, 93);
+  TR(225);
+  DF(200);
+  TL(270);
+  }
+  if(p == 1 && a == 2){
+  flywheel.spin(forward, 100, percent);
+  DF(95);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
+  Intake.stop();
+  wait(100, msec);
   //RollerMech();  
-  DR(80);
-  TR(180);
+  DR(60);
+  TR(187);
   wait(0.5, seconds);
   shootdiscs(2, 95);
   //above is tested
   TR(10);
   Intake.spin(reverse,100,percent);
-  DF(200);
+  DF(100);
   TR(53);
   Intake.spin(forward, 100, percent);
   DF(4500);
   TR(265);
   shootdiscs(3,90);
-  /*TR(45);
-  Intake.spin(forward, 100, percent);
-  DF(1000);
-  TL(125);
-  shootdiscs(3);
-  TR(225);
-  DF(200);
-  TR(270);*/
-  }
-  if(p == 1 && a == 2){
-  
   }
   if(p == 1 && a == 3){
   
