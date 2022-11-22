@@ -3,6 +3,12 @@ using namespace vex;
 extern brain Brain;
 
 // VEXcode devices
+extern triport Expander11;
+extern encoder RightSide;
+extern encoder LeftSide;
+extern encoder BackSide;
+extern line DiscSensor;
+extern motor fL;
 extern motor fL;
 extern motor bL;
 extern motor fR;

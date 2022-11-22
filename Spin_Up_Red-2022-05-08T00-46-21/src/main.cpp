@@ -10,18 +10,11 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// fL                   motor         2               
-// bL                   motor         9               
-// fR                   motor         1               
-// bR                   motor         10              
-// Inertial5            inertial      5               
+// Expander11           triport       11              
 // RightSide            encoder       A, B            
 // LeftSide             encoder       C, D            
 // BackSide             encoder       E, F            
-// Controller1          controller                    
-// Intake               motor         13              
-// Optical4             optical       4               
-// flywheel             motor_group   7, 8            
+// DiscSensor           line          A               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -229,6 +222,17 @@ void DR(float degs){
     bL.setStopping(hold);
     bR.setStopping(hold);
  }
+int discsInBot = 0;
+void intaketakein (){
+  while(discsInBot<3){
+    Intake.spin(forward, 100, percent);
+    if(DiscSensor.value(pct) < 70){
+      discsInBot = discsInBot+1;
+    } 
+  }
+  Intake.stop();
+
+}
 
 void SR(float degs){
   RightSide.setPosition(0,degrees);
@@ -327,6 +331,7 @@ void shootdiscs(int discs, int flypower){
       wait(200,msec);
       Indexer = 0;
       discs_shot = discs_shot+1;
+      discsInBot = discsInBot - 1;
     }
 }
 void pre_auton(void) {
@@ -679,17 +684,17 @@ void autonomous(void) {
   wait(100, msec);
   RollerMech();  
   DR(57);
-  TR(186);
+  TR(183);
   wait(0.5, seconds); 
   shootdiscs(2, 90);
   //above is tested
   TR(60);
-  Intake.spin(forward, 100, percent);
+  intaketakein();
   DF(4500);
   TL(280);
   shootdiscs(3,85);
   TR(80);
-  Intake.spin(forward, 100, percent);
+  intaketakein();
   DF(4000);
   TL(315);
   shootdiscs(3, 93);
