@@ -693,24 +693,26 @@ void autonomous(void) {
   Intake.spin(forward,100,percent);
   DF(1400);
   TL(-80);
-  shootdiscs(2,68);
+  shootdiscs(3,68);
   TR(68);
   Intake.spin(reverse,100,percent);
   DF(2300);
+  TR(20);
   RollerMech();
   }
   if(p == 1 && a == 2){
+  discsInBot=2;
   flywheel.spin(forward, 100, percent);
   DF(95);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
-  //RollerMech();  
-  DR(60);
-  TR(187);
-  wait(0.5, seconds);
-  shootdiscs(2, 95);
+  RollerMech();  
+  DR(50);
+  TR(183);
+  wait(0.5, seconds); 
+  shootdiscs(2, 88);
   //above is tested
   TR(10);
   Intake.spin(reverse,100,percent);
