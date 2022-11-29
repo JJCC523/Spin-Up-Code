@@ -157,7 +157,7 @@ void TR(float degs){
 void TL(float degs){
   Inertial5.setHeading(358, degrees);
   Inertial5.resetRotation();
-    while (Inertial5.heading(degrees)>(degs)){
+    while (Inertial5.rotation(degrees)>(degs)){
 
     error = (degs) + Inertial5.rotation(degrees);
     float MotorPower = error * 1.2;
@@ -308,7 +308,7 @@ void STL(float degs){
 void RollerMech(){
   if (c == 1){
     while(Optical4.color() != blue){
-      Intake.spin(forward, 50, percent);
+      Intake.spin(reverse, 50, percent);
       }
   Intake.stop();
   takein = 2;
@@ -326,12 +326,12 @@ void shootdiscs(int discs, int flypower){
   int discs_shot = 0;
     while(discs_shot < discs){
       flywheel.spin(forward, 100, percent);
-      wait(1,seconds);
       Indexer = 1;
       wait(200,msec);
       Indexer = 0;
       discs_shot = discs_shot+1;
       discsInBot = discsInBot - 1;
+      wait(1,seconds);
     }
 }
 void pre_auton(void) {
@@ -676,6 +676,7 @@ void pre_auton(void) {
 void autonomous(void) { 
 //Left Side
   if(p == 1 && a == 1){
+  discsInBot=2;
   flywheel.spin(forward, 100, percent);
   DF(95);
   Intake.spin(reverse, 50,percent);
@@ -683,24 +684,20 @@ void autonomous(void) {
   Intake.stop();
   wait(100, msec);
   RollerMech();  
-  DR(57);
+  DR(50);
   TR(183);
   wait(0.5, seconds); 
-  shootdiscs(2, 90);
+  shootdiscs(2, 88);
   //above is tested
-  TR(60);
-  intaketakein();
-  DF(4500);
-  TL(280);
-  shootdiscs(3,85);
-  TR(80);
-  intaketakein();
-  DF(4000);
-  TL(315);
-  shootdiscs(3, 93);
-  TR(225);
-  DF(200);
-  TL(270);
+  TR(55);
+  Intake.spin(forward,100,percent);
+  DF(1400);
+  TL(-80);
+  shootdiscs(2,68);
+  TR(68);
+  Intake.spin(reverse,100,percent);
+  DF(2300);
+  RollerMech();
   }
   if(p == 1 && a == 2){
   flywheel.spin(forward, 100, percent);
