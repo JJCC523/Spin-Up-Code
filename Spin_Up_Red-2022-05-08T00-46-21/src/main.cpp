@@ -697,6 +697,8 @@ void autonomous(void) {
   TR(68);
   Intake.spin(reverse,100,percent);
   DF(2300);
+  Intake.spin(forward,100,percent);
+  STL(500);
   TR(20);
   RollerMech();
   }
