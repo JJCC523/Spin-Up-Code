@@ -12,7 +12,7 @@ triport Expander11 = triport(PORT11);
 encoder RightSide = encoder(Brain.ThreeWirePort.A);
 encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);
-line DiscSensor = line(Expander11.A);
+distance DiscSensor = distance(PORT11);
 motor fL = motor(PORT2, ratio18_1, true);
 digital_out Indexer = digital_out(Brain.ThreeWirePort.G);
 motor bL = motor(PORT9, ratio6_1, true);
@@ -25,6 +25,7 @@ optical Optical4 = optical(PORT4);
 motor flywheelMotorA = motor(PORT7, ratio6_1, false);
 motor flywheelMotorB = motor(PORT6, ratio6_1, false);
 motor_group flywheel = motor_group(flywheelMotorA, flywheelMotorB);
+
 
 // VEXcode generated functions
 
