@@ -769,7 +769,17 @@ void autonomous(void) {
   shootdiscs(3, 95);
   }
   if(p == 2 && a == 5){
-  
+    flywheel.spin(forward, 100, percent);
+    wait(1.75, sec);
+    shootdiscs(2, 100);
+    SR(1700);
+    RollerMech();
+    DR(80); 
+    TR(90);
+    DF(100, 100);
+    TR(45);
+    Intake.spin(forward, 100, percent); 
+    DF(1500, 100);
   }
 }
 
