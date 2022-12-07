@@ -40,6 +40,7 @@ int botInDiscs(){
     wait(100, msec);
     if(DiscSensor.objectDistance(mm)<35){
       discsInBot=discsInBot+1;
+      wait(1.5, seconds);
     }
     if(discsInBot == 3){
       takein=2;
