@@ -7,12 +7,12 @@ using code = vision::code;
 // A global instance of brain used for printing to the V5 Brain screen
 brain  Brain;
 
-// VEXcode device constructors
-triport Expander11 = triport(PORT11);
+// VEXcode device constructors 
+triport Expander11 = triport(PORT11); 
 encoder RightSide = encoder(Brain.ThreeWirePort.A);
 encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);
-distance DiscSensor = distance(PORT11);
+distance DiscSensor = distance(PORT12);
 motor fL = motor(PORT2, ratio18_1, true);
 digital_out Indexer = digital_out(Brain.ThreeWirePort.G);
 motor bL = motor(PORT9, ratio6_1, true);

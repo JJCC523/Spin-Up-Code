@@ -33,20 +33,19 @@ int forwardAxis(){
   }
   return(1);
 }
-int takein=2;
+int takein=0;
 int discsInBot = 0;
 int botInDiscs(){
   while(true){
     wait(100, msec);
-    if(DiscSensor.objectDistance(mm)<35){
-      discsInBot=discsInBot+1;
-      wait(1.5, seconds);
+    
+    if(DiscSensor.objectDistance(mm)<70){
+      Controller1.Screen.setCursor(1, 1);
+      Controller1.Screen.print("3");
+      takein=0;
     }
-    if(discsInBot == 3){
-      takein=2;
-    }
-  }
-  return(1);
+}
+return(1);
 }
 
 int c = 0;
@@ -283,8 +282,9 @@ void SR(float degs){
 void STR(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
+  BackSide.setPosition(0, degrees);
   fL.resetPosition();
-    while (fL.position(degrees)<degs){
+    while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
@@ -371,10 +371,11 @@ void pre_auton(void) {
   Controller1.Screen.setCursor(3,1);
   Controller1.Screen.print("%.2f", DiscSensor.objectDistance(mm));
   //Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
-  Controller1.Screen.setCursor(2,1);
-  Controller1.Screen.print("Heading:%f",Inertial5.heading(degrees));  
+
   Controller1.Screen.setCursor(1,1);
-  Controller1.Screen.print(discsInBot);
+  if(DiscSensor.objectDistance(mm)<70){
+  Controller1.Screen.print("3");
+  }
   wait(50,msec); 
   Controller1.Screen.clearScreen();
   gui::thatthingyoupress RedSide(5,5);
@@ -687,7 +688,7 @@ void pre_auton(void) {
   }
   
     wait(20,msec);
-    takein=2;
+    takein=0;
   
 
   // All activities that occur before the competition starts
@@ -772,13 +773,12 @@ void autonomous(void) {
   if(p == 2 && a == 5){
     flywheel.spin(forward, 100, percent);
     wait(1.75, sec);
-    shootdiscs(2, 100);
+    shootdiscs(2, 88);
     SR(1700);
     RollerMech();
-    DR(80); 
-    TR(90);
-    DF(100, 100);
-    TR(45);
+    DR(30);
+    STR(400);
+    TR(135);
     Intake.spin(forward, 100, percent); 
     DF(1500, 100);
   }
@@ -854,9 +854,10 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
     if(takein == 3){
       Intake.spin(reverse, 100, percent); 
     } 
-
+ 
     if(Controller1.ButtonB.pressing()){
-      Indexer = 1;
+      wait(10, msec);
+      Indexer = 1; 
       wait(150,msec);
       Indexer = 0;
     }  
@@ -896,7 +897,8 @@ if(Controller1.ButtonY.pressing()){
     if(rishiethefishielovesjews == 0){
       flywheel.setVelocity(80, percent);
     }
-
+Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print(takein);
 
     wait(25, msec);
   }
