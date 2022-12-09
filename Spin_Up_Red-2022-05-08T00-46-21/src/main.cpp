@@ -781,6 +781,8 @@ void autonomous(void) {
     TR(135);
     Intake.spin(forward, 100, percent); 
     DF(1500, 100);
+    TR(90);
+    shootdiscs(3, 78);
   }
 }
 
