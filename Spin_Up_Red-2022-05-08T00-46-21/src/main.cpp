@@ -308,7 +308,9 @@ void STL(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
   fR.resetPosition();
-    while (fR.position(degrees)<degs){
+  BackSide.setPosition(0, degrees);
+  fL.resetPosition();
+    while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
     float MotorPower = error * kP;
 
@@ -332,14 +334,14 @@ void STL(float degs){
 void RollerMech(){
   if (c == 1){
     while(Optical4.color() != blue){
-      Intake.spin(reverse, 50, percent);
+      Intake.spin(reverse, 30, percent);
       }
   Intake.stop();
   takein = 2;
   }
   if (c == 2){
     while(Optical4.color() != red){
-      Intake.spin(reverse, 50, percent);
+      Intake.spin(reverse, 30, percent);
       }
   Intake.stop();
   takein = 2;
@@ -773,16 +775,18 @@ void autonomous(void) {
   if(p == 2 && a == 5){
     flywheel.spin(forward, 100, percent);
     wait(1.75, sec);
-    shootdiscs(2, 88);
+    shootdiscs(2, 84);
     SR(1700);
+    Intake.spin(reverse,25,percent);
+    wait(0.5, sec);
     RollerMech();
     DR(30);
-    STR(400);
-    TR(135);
-    Intake.spin(forward, 100, percent); 
-    DF(1500, 100);
-    TR(90);
-    shootdiscs(7, 78);
+    STR(650);
+    TR(138);
+    /*Intake.spin(forward, 100, percent); 
+    DF(1550, 100);
+    TR(95);
+    shootdiscs(7, 78);*/
   }
 }
 
@@ -792,13 +796,15 @@ int shooter = 0;
 
 void usercontrol(void) {
   enableDrivePID= false;
-    int takein = 2;
+    int takein = 1;
  
     
 
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
   int deadband = 5;
+  shooter = 1;
+  takein = 1;
   while (true) {
     thread t(botInDiscs);
     fL.setStopping(hold);
@@ -829,19 +835,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       //takein=2;
     //}
 
-    if(Controller1.ButtonRight.pressing()){ 
-      if(c == 1){
-        while(Optical4.color() == red){
-        Intake.spin(forward, 50, percent);
-      } 
-      }
-      if(c == 2){
-        while(Optical4.color() == blue){
-        Intake.spin(forward, 50, percent);
-      } 
-      }  
-    takein = 2;
-    }
+    Controller1.ButtonRight.pressed(RollerMech);
     if(takein == 1){
       Intake.spin(forward, 100, percent);
     }
@@ -901,6 +895,15 @@ if(Controller1.ButtonY.pressing()){
     }
 Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print(takein);
+  if(DiscSensor.objectDistance(mm)<70){
+      Controller1.Screen.setCursor(1, 1);
+      Controller1.Screen.print("3");
+      takein=0;
+    }
+  else if (DiscSensor.objectDistance(mm)>70){
+      takein=1;
+
+  }
 
     wait(25, msec);
   }
