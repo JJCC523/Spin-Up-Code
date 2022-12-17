@@ -68,8 +68,6 @@ int RollerMecch(){
 int botInDiscs(){
   while(true){
     if(DiscSensor.objectDistance(mm)<70){
-      Controller1.Screen.setCursor(1, 1);
-      Controller1.Screen.print("3");
       takein=0;
     }
   else if (DiscSensor.objectDistance(mm)>70 && rishiethefishiehatesjews == 0){
@@ -399,11 +397,10 @@ void pre_auton(void) {
   wait(3,seconds);
   while(true){
     thread t(botInDiscs);
-  //Controller1.Screen.setCursor(1,1);
-  //Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
-  Controller1.Screen.setCursor(3,1);
-  Controller1.Screen.print("%.2f", DiscSensor.objectDistance(mm));
-  //Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+  Controller1.Screen.setCursor(1,1);
+  Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
 
   Controller1.Screen.setCursor(1,1);
   if(DiscSensor.objectDistance(mm)<70){
@@ -857,8 +854,6 @@ bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
 bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
 if(DiscSensor.objectDistance(mm)<70){
-      Controller1.Screen.setCursor(1, 1);
-      Controller1.Screen.print("3");
       takein=0;
     }
   else if (DiscSensor.objectDistance(mm)>70 && rishiethefishiehatesjews == 0){
@@ -937,8 +932,6 @@ if(Controller1.ButtonY.pressing()){
     if(rishiethefishielovesjews == 0){
       flywheel.setVelocity(77, percent);
     }
-Controller1.Screen.setCursor(2,1);
-  Controller1.Screen.print(takein);
 
   if(Controller1.ButtonR2.pressing()){
     wait(10, msec);

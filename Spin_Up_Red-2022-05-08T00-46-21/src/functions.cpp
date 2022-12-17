@@ -76,11 +76,11 @@ void resetTotalDistance()
 
 // Obtain the current values of the tracking wheel encoders
 double getRightReading() {
-  return -ticksToInches(encoderR.rotation(deg)); // negative because right encoder is backwards
+  return -ticksToInches(RightSide.rotation(deg)); // negative because right encoder is backwards
 }
 
 double getLeftReading() {
-  return -ticksToInches(encoderL.rotation(deg));
+  return -ticksToInches(LeftSide.rotation(deg));
 }
 
 
@@ -114,7 +114,7 @@ void resetTotalDistance()
 // Obtain the current inertial sensor rotation relative to the starting rotation
 double getRotationDeg()
 {
-  return -INERTIAL.rotation(deg); // Important that this is negative
+  return -Inertial5.rotation(deg); // Important that this is negative
   // This makes positive angles CCW (left) and negative angles CW (right)
   // 0 degrees is on the positive x-axis
 }
@@ -134,18 +134,14 @@ double getRotationRad()
 // Set the speeds of different sides of the base
 void setLeftBase(double speed)
 {
-  L1BASE.spin(fwd, speed, pct);
-  L2BASE.spin(fwd, speed, pct);
-  L3BASE.spin(fwd, speed, pct);
-  L4BASE.spin(fwd, speed, pct);
+  fL.spin(fwd, speed, pct);
+  bL.spin(fwd, speed, pct);
 }
 
 void setRightBase(double speed)
 {
-  R1BASE.spin(fwd, speed, pct);
-  R2BASE.spin(fwd, speed, pct);
-  R3BASE.spin(fwd, speed, pct);
-  R4BASE.spin(fwd, speed, pct);
+  fR.spin(fwd, speed, pct);
+  bR.spin(fwd, speed, pct);
 }
 
 void setBase(double speed)
@@ -156,15 +152,10 @@ void setBase(double speed)
 
 void stopBase()
 {
-  L1BASE.stop(coast);
-  L2BASE.stop(coast);
-  L3BASE.stop(coast);
-  L4BASE.stop(coast);
-
-  R1BASE.stop(coast);
-  R2BASE.stop(coast);
-  R3BASE.stop(coast);
-  R4BASE.stop(coast);
+  fR.stop(hold);
+  fL.stop(hold);
+  bR.stop(hold);
+  bL.stop(hold);
 }
 
 
