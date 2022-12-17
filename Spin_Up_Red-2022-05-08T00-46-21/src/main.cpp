@@ -191,7 +191,7 @@ void TR(float degs){
     while (Inertial5.heading(degrees)<degs){
 
     error = degs - Inertial5.rotation(degrees);
-    float MotorPower = error * 1.2;
+    float MotorPower = error * 0.7;
 
     fL.spin(forward, MotorPower, percent);
     bL.spin(forward, MotorPower, percent);
@@ -227,7 +227,7 @@ void TL(float degs){
     bR.stop();
     fL.setStopping(hold);
     fR.setStopping(hold);
-    bL.setStopping(hold);
+    bL.setStopping(hold); 
     bR.setStopping(hold);
 }
   //float fwdAxis = ((RightSide.position(degrees)+LeftSide.position(degrees))/2);
@@ -236,6 +236,7 @@ void DF(float degs, int pwr){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
   fL.setPosition(0, degrees);
+  fwdAxis = 0;
     while (fwdAxis<degs){
     
 
@@ -493,7 +494,7 @@ void pre_auton(void) {
   gui::thatthingyoupress Auto1(200,100);
   Brain.Screen.setCursor(9,21);
   Brain.Screen.print("Auto 1");
-  gui::thatthingyoupress Auto2(270,100); 
+  gui::thatthingyoupress Auto5(270,100); 
   Brain.Screen.setCursor(9,28);
   Brain.Screen.print("Auto 2");
   if(Auto1.pressed()){
@@ -503,8 +504,8 @@ void pre_auton(void) {
   if(a != 4)
   a=4;
   }
-  if(Auto2.pressed()){
-  while(Auto2.pressed()){
+  if(Auto5.pressed()){
+  while(Auto5.pressed()){
     wait(10,msec);
   }
   if(a != 5)
@@ -805,10 +806,11 @@ void autonomous(void) {
   if(p == 2 && a == 5){
     flywheel.spin(forward, 100, percent);
     wait(1.4, sec);
-    shootdiscs(2, 93);
-    SR(1700);
-    STR(10); 
-    DF(30, 100);
+    shootdiscs(2, 94);
+    TR(75);
+    DF(400, 100);
+    TR(90);
+    DF(50, 100);
     Intake.spin(reverse,25,percent);
     wait(0.5, sec);
     RollerMech();
