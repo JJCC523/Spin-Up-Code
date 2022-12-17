@@ -17,6 +17,9 @@
 
 #include "robot-config.h"
 
+#include "functions.h"
+#include "odom.h"
+
 #define waitUntil(condition)                                                   \
   do {                                                                         \
     wait(5, msec);                                                             \

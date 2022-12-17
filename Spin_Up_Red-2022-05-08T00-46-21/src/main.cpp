@@ -940,6 +940,13 @@ if(Controller1.ButtonY.pressing()){
 Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print(takein);
 
+  if(Controller1.ButtonR2.pressing()){
+    wait(10, msec);
+    Endgame = 1; 
+    wait(150,msec);
+    Endgame = 0;
+  }
+
     wait(25, msec);
   }
 

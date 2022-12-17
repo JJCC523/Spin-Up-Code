@@ -22,6 +22,8 @@ extern motor_group Intake;
 extern digital_out Indexer;
 extern optical Optical4;
 extern motor_group flywheel;
+extern digital_out Endgame;
+
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

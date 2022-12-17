@@ -27,6 +27,7 @@ optical Optical4 = optical(PORT4);
 motor flywheelMotorA = motor(PORT7, ratio6_1, false);
 motor flywheelMotorB = motor(PORT6, ratio6_1, false);
 motor_group flywheel = motor_group(flywheelMotorA, flywheelMotorB);
+digital_out Endgame = digital_out(Brain.ThreeWirePort.H);
 
 
 // VEXcode generated functions
