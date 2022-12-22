@@ -36,6 +36,7 @@ double getGlobalY();
       moveToTarget(25, 30); // move to target position with 25% forward speed and 30% turning speed
 
 */
+void setStartingPos(float x, float y);
 void setTarget(double x, double y); // set the target point
 void turnToTarget(double maxTurnSpeed); // turn towards the target point
 void moveToTarget(double maxFwdSpeed, double maxTurnSpeed);

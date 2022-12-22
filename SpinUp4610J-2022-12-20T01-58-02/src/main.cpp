@@ -801,22 +801,31 @@ void autonomous(void) {
   shootdiscs(3, 95);
   }
   if(p == 2 && a == 5){
-    flywheel.spin(forward, 100, percent);
-    wait(1.4, sec);
-    shootdiscs(2, 94);
-    TR(75);
-    DF(400, 100);
-    TR(90);
-    DF(50, 100);
+    setStartingPos(5, 5);
+    flywheel.spin(forward, 96, percent);
+    turnPIDCycle(-22, 50);
+    turnPID(-22, 50, -1);
+    wait(0.5, sec); 
+    shootdiscs(2, 95);
+    turnPIDCycle(-90, 100);
+    turnPID(-90, 100, -1);
+    DF(350, 100);
+    turnPIDCycle(-180, 100);
+    turnPID(-180, 100, -1);    
+    DF(65, 100);
     Intake.spin(reverse,25,percent);
     wait(0.5, sec);
     RollerMech();
     DR(30);
     STR(550);
-    TR(142);
+    turnPIDCycle(-315, 100);
+    turnPID(-315, 100, -1);   
     Intake.spin(forward, 100, percent); 
     DF(1400, 100);
-    TR(85);
+    turnPIDCycle(-0, 100);
+    turnPID(-0, 100, -1);
+    turnPIDCycle(-60, 100);
+    turnPID(-60, 100, -1);
     shootdiscs(3, 85);
   }
 }
@@ -828,7 +837,7 @@ int shooter = 0;
 void usercontrol(void) {
   enableDrivePID= false;
     int takein = 1;
- 
+  setStartingPos(5, 5);
     
 
   while (1) {
@@ -938,6 +947,12 @@ if(Controller1.ButtonY.pressing()){
     Endgame = 1; 
     wait(150,msec);
     Endgame = 0;
+  }
+
+  if(Controller1.ButtonLeft.pressing()){
+    getDegToPoint(5, 5);
+    setTarget(5, 5);
+    turnToTarget(50);
   }
 
     wait(25, msec);

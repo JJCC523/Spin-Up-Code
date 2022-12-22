@@ -2,8 +2,8 @@
 
 // tracking wheel perpendicular distances from true center of robot.
 // Seen at page 4 of Pilons odometry doc (http://thepilons.ca/wp-content/uploads/2018/10/Tracking.pdf)
-const double leftOffset =  4.875; // left
-const double rightOffset = 4.875; // right
+const double leftOffset =  6.875; // left
+const double rightOffset = 6.875; // right
 
 
 /*
@@ -24,6 +24,10 @@ double globalY = 0;
 double getGlobalX() { return globalX; }
 double getGlobalY() { return globalY; }
 
+void setStartingPos(float x, float y){
+  globalX = x;
+  globalY = y;
+}
 
 // Current positions of tracking wheel encoders
 float curLeft = 0;
