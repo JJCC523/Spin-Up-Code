@@ -757,23 +757,25 @@ void autonomous(void) {
   RollerMech();
   }
   if(p == 1 && a == 2){
-  discsInBot=2;
   flywheel.spin(forward, 100, percent);
-  DF(95, 100);
+  DF(15, 100);
   Intake.spin(reverse, 50,percent);
-  wait(0.4, sec); 
-  Intake.stop();
+  wait(0.1, sec); 
+  Intake.stop(); 
   wait(100, msec);
   RollerMech();  
-  DR(50);
-  TR(183);
+  DR(20);
+  turnPIDCycle(177, 100);
+  turnPID(177, 100, -1);
   wait(0.5, seconds); 
   shootdiscs(2, 88);
   //above is tested
-  TR(55);
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1);
   Intake.spin(forward,100,percent);
   DF(1400, 80);
-  TL(-90);
+  turnPIDCycle(225, 100);
+  turnPID(225, 100, -1);  
   shootdiscs(3,68);
   }
   if(p == 1 && a == 3){
@@ -801,14 +803,13 @@ void autonomous(void) {
   shootdiscs(3, 95);
   }
   if(p == 2 && a == 5){
-    setStartingPos(5, 5);
     flywheel.spin(forward, 96, percent);
-    turnPIDCycle(-22, 50);
-    turnPID(-22, 50, -1);
-    wait(0.5, sec); 
+    //turnPIDCycle(-22, 50);
+    //turnPID(-22, 50, -1);
+    wait(1.3, sec); 
     shootdiscs(2, 95);
     turnPIDCycle(-90, 100);
-    turnPID(-90, 100, -1);
+    turnPID(-90, 100, 1500);
     DF(350, 100);
     turnPIDCycle(-180, 100);
     turnPID(-180, 100, -1);    
@@ -819,14 +820,12 @@ void autonomous(void) {
     DR(30);
     STR(550);
     turnPIDCycle(-315, 100);
-    turnPID(-315, 100, -1);   
+    turnPID(-315, 100, 2000);   
     Intake.spin(forward, 100, percent); 
-    DF(1400, 100);
-    turnPIDCycle(-0, 100);
-    turnPID(-0, 100, -1);
-    turnPIDCycle(-60, 100);
-    turnPID(-60, 100, -1);
-    shootdiscs(3, 85);
+    DF(1250, 100);
+    turnPIDCycle(-410, 100);
+    turnPID(-410, 100, -1);
+    shootdiscs(4, 83);
   }
 }
 
