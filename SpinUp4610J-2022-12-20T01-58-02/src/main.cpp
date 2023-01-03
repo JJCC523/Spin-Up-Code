@@ -732,28 +732,33 @@ void autonomous(void) {
   if(p == 1 && a == 1){
   discsInBot=2;
   flywheel.spin(forward, 100, percent);
-  DF(95, 100);
+  DF(30, 100);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
   RollerMech();  
   DR(50);
-  TR(183);
-  wait(0.5, seconds); 
+  turnPIDCycle(180, 100);
+  turnPID(180, 100, -1);
   shootdiscs(2, 89);
   //above is tested
-  TR(55);
+  turnPIDCycle(129, 100);
+  turnPID(129, 100, -1);  
   Intake.spin(forward,100,percent);
-  DF(1600, 80);
-  TL(-85);
-  shootdiscs(3,68);
-  TR(68);
+  DF(800, 100);
+  wait(0.1, seconds);
+  DF(800, 50);
+  turnPIDCycle(214, 100);
+  turnPID(214, 100, -1); 
+  shootdiscs(3,75);
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1);  
+  Intake.spin(forward,100,percent); 
+  DF(1900,100);
   Intake.spin(forward,100,percent);
-  DF(2800,100);
-  Intake.spin(forward,100,percent);
-  STL(300);
-  TR(20);
+  turnPIDCycle(90, 100);
+  turnPID(90, 100, -1);
   RollerMech();
   }
   if(p == 1 && a == 2){
@@ -948,11 +953,11 @@ if(Controller1.ButtonY.pressing()){
     Endgame = 0;
   }
 
-  if(Controller1.ButtonLeft.pressing()){
-    getDegToPoint(5, 5);
-    setTarget(5, 5);
-    turnToTarget(50);
-  }
+  //if(Controller1.ButtonLeft.pressing()){
+    //getDegToPoint(5, 5);
+    //setTarget(5, 5);
+    //turnToTarget(50);
+  //}
 
     wait(25, msec);
   }
