@@ -389,6 +389,22 @@ void shootdiscs(int discs, int flypower){
       wait(1,seconds);
     }
 }
+
+int backgroundTasks()
+{
+  while (true)
+  {
+    updatePosition(); // Update the odometry position
+    // Draw the debug values and the field dashboard
+
+    //values();
+    //odomDisplay();
+    //graph();
+    task::sleep(10); // Wait some time between odometry cycles. Test making it shorter for better position estimates
+  }
+  return 0;
+}
+
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
@@ -727,8 +743,10 @@ void pre_auton(void) {
 
 
 
-void autonomous(void) { 
+void autonomous(void) {
+  setStartingPos(0, 0);
   thread t(forwardAxis);
+  thread o(backgroundTasks);
   if(p == 1 && a == 1){
   discsInBot=2;
   flywheel.spin(forward, 100, percent);
@@ -788,6 +806,7 @@ void autonomous(void) {
   }
 //Right Side & Red
   if(p == 2 && a == 4){
+  setStartingPos(0, 0);
   flywheel.spin(forward, 100, percent);
   SR(4000);
   Intake.spin(reverse, 50,percent);
@@ -808,9 +827,10 @@ void autonomous(void) {
   shootdiscs(3, 95);
   }
   if(p == 2 && a == 5){
+    setStartingPos(0, 0);
     flywheel.spin(forward, 96, percent);
-    //turnPIDCycle(-22, 50);
-    //turnPID(-22, 50, -1);
+    turnPIDCycle(-22, 50);
+    turnPID(-22, 50, -1);
     wait(1.3, sec); 
     shootdiscs(2, 95);
     turnPIDCycle(-90, 100);
@@ -838,10 +858,23 @@ void autonomous(void) {
 int rishiethefishielovesjews = 0;
 int shooter = 0;
 
+
+int test()
+{
+  while (getTotalDistance() < 10)
+  {
+    task::sleep(10);
+  } 
+  Brain.Screen.setFillColor(color(200, 80, 30)); // green in rgb
+  Brain.Screen.setPenWidth(0);
+  Brain.Screen.drawRectangle(0, 0, 480, 272); // fill entire screen
+
+  return 0;
+}
+
 void usercontrol(void) {
   enableDrivePID= false;
     int takein = 1;
-  setStartingPos(5, 5);
     
 
   while (1) {
@@ -852,6 +885,7 @@ void usercontrol(void) {
   while (true) {
     thread t(botInDiscs);
     thread r(RollerMecch);
+    thread a(backgroundTasks);
     fL.setStopping(hold);
     fR.setStopping(hold);
     bR.setStopping(hold);
@@ -952,12 +986,13 @@ if(Controller1.ButtonY.pressing()){
     wait(150,msec);
     Endgame = 0;
   }
+  
+  if(Controller1.ButtonLeft.pressing()){
+    getDegToPoint(70.9 , -22.7);
+    setTarget(70.9 , -22.7);
+    turnToTarget(100);
+  }
 
-  //if(Controller1.ButtonLeft.pressing()){
-    //getDegToPoint(5, 5);
-    //setTarget(5, 5);
-    //turnToTarget(50);
-  //}
 
     wait(25, msec);
   }

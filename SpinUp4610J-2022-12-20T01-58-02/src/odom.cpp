@@ -442,14 +442,14 @@ void odomDisplay()
 {
   // Draw Y
 
-  Brain.Screen.setPenColor(yellow);
+  /*Brain.Screen.setPenColor(yellow);
   Brain.Screen.setPenWidth(40);
   Brain.Screen.drawLine(100, 125, 100, 220);
   Brain.Screen.drawLine(100, 130, 35, 35);
-  Brain.Screen.drawLine(100, 130, 165, 35);
+  Brain.Screen.drawLine(100, 130, 165, 35);*/
 
 
-  /*
+  
   // Draw grid of the field
   Brain.Screen.setFillColor(black);
   Brain.Screen.setPenColor(color(100, 100, 100));
@@ -487,5 +487,49 @@ void odomDisplay()
                         
   Brain.Screen.setFillColor(purple);
   drawPoint(targetX, targetY); // Draw the target point on the screen
-  */
 }
+float lastGraphX = 0;
+  float lastGraphY = 0;
+  // Display the graph of a variable over time
+  void graph()
+  {
+    float x = timer::system()/35;
+    float y = getTotalDistance() * 50; //LFBASE.velocity(rpm);
+
+    // draw y = 0 line
+    Brain.Screen.setPenWidth(1);
+    Brain.Screen.setPenColor(color(255, 255, 255));
+    Brain.Screen.setFillColor(color(255, 255, 255));
+    Brain.Screen.drawLine(0, 136, 480, 136);
+
+    // Draw data
+    Brain.Screen.setPenWidth(1);
+    Brain.Screen.setPenColor(color(255, 150, 0));
+    Brain.Screen.setFillColor(color(255, 150, 0));
+    Brain.Screen.drawLine(lastGraphX, -lastGraphY + 136, x, -y + 136);
+    
+    lastGraphX = x;
+    lastGraphY = y;
+  }
+
+  void values(){
+
+  Brain.Screen.setFillColor(color(10, 80, 30)); // Set background to green in rgb
+  Brain.Screen.setPenColor(white); // Set text color to white
+
+  // Display debug values such as position, rotation, encoder values, total distancel, etc.
+  Brain.Screen.printAt(210, 30, "Pos: (%.1f, %.1f)     ", globalX, globalY);
+  Brain.Screen.printAt(210, 50, "Rot: %.1f deg      ", getRotationDeg());
+  Brain.Screen.printAt(210, 70, "Enc: L:%.1f R:%.1f S:%.1f    ", getLeftReading(), getRightReading());
+  Brain.Screen.printAt(210, 90, "Dis: %.7f", getTotalDistance());
+
+  /* Brain.Screen.printAt(210, 110, "Stoptime: %d   ", stopTime);
+  Brain.Screen.printAt(210, 130, "isStopped: %d   ", isStopped());*/
+
+  /* Brain.Screen.printAt(210, 110, "lir: %.1f  aaom: %.1f", lastInertialRadians * toDegrees, absoluteAngleOfMovement * toDegrees);
+  Brain.Screen.printAt(210, 130, "dth: %.1f  dd:%.1f", deltaTheta * toDegrees, deltaDistance);
+  Brain.Screen.printAt(210, 150, "dl:%.1f  dr:%.1f", deltaLeft, deltaRight);
+  Brain.Screen.printAt(210, 170, "dx:%.1f  dy:%.1f", deltaX, deltaY);*/
+}
+
+

@@ -49,3 +49,5 @@ void odomDisplay(); // Visually display position and rotation on the field
 void drawPoint(double x, double y); // Draw a point on the odometry dashboard
 double getScreenTouchX(); // Get the corresponding coordiantes of where you tap the screen
 double getScreenTouchY(); // Robot can move to point that you tap for debugging
+void graph();
+void values();
