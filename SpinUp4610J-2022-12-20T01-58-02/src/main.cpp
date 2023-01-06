@@ -396,7 +396,6 @@ int backgroundTasks()
   {
     updatePosition(); // Update the odometry position
     // Draw the debug values and the field dashboard
-
     //values();
     //odomDisplay();
     //graph();
@@ -749,60 +748,87 @@ void autonomous(void) {
   thread o(backgroundTasks);
   if(p == 1 && a == 1){
   discsInBot=2;
-  flywheel.spin(forward, 100, percent);
-  DF(30, 100);
+  flywheel.spin(forward, 95, percent);
+  DF(10, 100);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
-  RollerMech();  
-  DR(50);
-  turnPIDCycle(180, 100);
-  turnPID(180, 100, -1);
-  shootdiscs(2, 89);
+  RollerMech();   
+  DR(30); 
+  getDegToPoint(-86.3 , 12);
+  setTarget(-86.3 , 12);
+  turnToTarget(100);
+  shootdiscs(2, 93);
   //above is tested
-  turnPIDCycle(129, 100);
-  turnPID(129, 100, -1);  
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1);  
   Intake.spin(forward,100,percent);
+  Intake.stop();
+  DF(3400, 100);
+  wait(0.1, seconds);
+  //turnPIDCycle(214, 100);
+  //turnPID(214, 100, -1); 
+  //shootdiscs(3,90);
+  TR(35);
+  fL.spin(forward);
+  fR.spin(forward);
+  wait(0.7, seconds);
+  RollerMech();
+  }
+  if(p == 1 && a == 2){
+  discsInBot=2;
+  flywheel.spin(forward, 95, percent);
+  DF(10, 100);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
+  Intake.stop();
+  wait(100, msec);
+  RollerMech();   
+  DR(30); 
+  getDegToPoint(-86.3 , 12);
+  setTarget(-86.3 , 12);
+  turnToTarget(100);
+  shootdiscs(2, 93);
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1);  
+  Intake.spin(forward,100,percent);
+  Intake.stop();
   DF(800, 100);
   wait(0.1, seconds);
   DF(800, 50);
   turnPIDCycle(214, 100);
   turnPID(214, 100, -1); 
-  shootdiscs(3,75);
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);  
-  Intake.spin(forward,100,percent); 
-  DF(1900,100);
-  Intake.spin(forward,100,percent);
-  turnPIDCycle(90, 100);
-  turnPID(90, 100, -1);
-  RollerMech();
-  }
-  if(p == 1 && a == 2){
-  flywheel.spin(forward, 100, percent);
-  DF(15, 100);
-  Intake.spin(reverse, 50,percent);
-  wait(0.1, sec); 
-  Intake.stop(); 
-  wait(100, msec);
-  RollerMech();  
-  DR(20);
-  turnPIDCycle(177, 100);
-  turnPID(177, 100, -1);
-  wait(0.5, seconds); 
-  shootdiscs(2, 88);
-  //above is tested
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);
-  Intake.spin(forward,100,percent);
-  DF(1400, 80);
-  turnPIDCycle(225, 100);
-  turnPID(225, 100, -1);  
-  shootdiscs(3,68);
+  shootdiscs(3,90);
   }
   if(p == 1 && a == 3){
-  
+  discsInBot=2;
+  flywheel.spin(forward, 95, percent);
+  DF(10, 100);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
+  Intake.stop();
+  wait(100, msec);
+  RollerMech();   
+  DR(30);
+  turnPIDCycle(-135, 100);
+  turnPID(-135, 100, -1); 
+  DF(300, 100);
+  turnPIDCycle(-90, 100);
+  turnPID(-90, 100, -1);
+  DF(140, 100);
+  wait(0.3, seconds); 
+  DF(10, 50);
+  RollerMech();
+  getDegToPoint(-86.3 , 12);
+  setTarget(-86.3 , 12);
+  turnToTarget(100);
+  shootdiscs(2, 87);
+  turnPIDCycle(-260, 100);
+  turnPID(-260, 100, -1);
+  Intake.spin(forward, 100, percent);
+  DF(200, 100);
+  DF(500, 50);
   }
 //Right Side & Red
   if(p == 2 && a == 4){
@@ -988,9 +1014,16 @@ if(Controller1.ButtonY.pressing()){
   }
   
   if(Controller1.ButtonLeft.pressing()){
+    if(p == 2){
     getDegToPoint(70.9 , -22.7);
     setTarget(70.9 , -22.7);
     turnToTarget(100);
+    }
+    if(p == 1){
+    getDegToPoint(-86.3 , 1);
+    setTarget(-86 , 1);
+    turnToTarget(100);
+    }
   }
 
 
