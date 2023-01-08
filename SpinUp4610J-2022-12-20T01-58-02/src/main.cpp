@@ -253,6 +253,29 @@ void DF(float degs, int pwr){
     bR.setStopping(hold);
 }
 
+void DFmotor(float degs, int pwr){
+  RightSide.setPosition(0,degrees);
+  LeftSide.setPosition(0,degrees);
+  fL.setPosition(0, degrees);
+  fwdAxis = 0;
+    while (fL.position(degrees)<degs){
+    
+
+    fL.spin(forward, pwr, percent);
+    bL.spin(forward, pwr, percent);
+    fR.spin(forward, pwr, percent);
+    bR.spin(forward, pwr, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
+
 void DR(float degs){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
@@ -382,7 +405,7 @@ void shootdiscs(int discs, int flypower){
     while(discs_shot < discs){
       flywheel.spin(forward, flypower, percent);
       Indexer = 1;
-      wait(200,msec);
+      wait(150,msec);
       Indexer = 0;
       discs_shot = discs_shot+1;
       discsInBot = discsInBot - 1;
@@ -803,7 +826,7 @@ void autonomous(void) {
   }
   if(p == 1 && a == 3){
   discsInBot=2;
-  flywheel.spin(forward, 95, percent);
+  flywheel.spin(forward, 92, percent);
   DF(10, 100);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
@@ -813,22 +836,52 @@ void autonomous(void) {
   DR(30);
   turnPIDCycle(-135, 100);
   turnPID(-135, 100, -1); 
-  DF(300, 100);
+  Intake.spin(forward, 100, percent);
+  DF(400, 100);
   turnPIDCycle(-90, 100);
   turnPID(-90, 100, -1);
-  DF(140, 100);
+  DFmotor(140, 100);
   wait(0.3, seconds); 
-  DF(10, 50);
+  DFmotor(10, 50);
   RollerMech();
-  getDegToPoint(-86.3 , 12);
-  setTarget(-86.3 , 12);
+  getDegToPoint(-86.3 , 11);
+  setTarget(-86.3 , 11);
   turnToTarget(100);
-  shootdiscs(2, 87);
+   shootdiscs(1, 82);
+   wait(1.5, seconds);
+  shootdiscs(2, 89);
   turnPIDCycle(-260, 100);
   turnPID(-260, 100, -1);
   Intake.spin(forward, 100, percent);
-  DF(200, 100);
+  DF(400, 100);
   DF(500, 50);
+  turnPIDCycle(-315, 100);
+  turnPID(-315, 100, -1);
+  DF(450, 100);
+  turnPIDCycle(-268, 100);
+  turnPID(-268, 100, -1);
+  shootdiscs(3, 75);
+  DR(400);
+  repeat (3){
+    Intake.spin(forward, 100, percent);
+    DFmotor(1000, 100);
+    wait(0.3, seconds);
+    DR(300);
+    DF(20, 100);
+    DR(20);
+    turnPIDCycle(-268, 100);
+    turnPID(-268, 100, -1);
+    shootdiscs(3, 75);
+  }
+  shootdiscs(1, 75);
+  turnPIDCycle(-360, 100);
+  turnPID(-360, 100, -1);
+  DR(100);
+  turnPIDCycle(-225, 100);
+  turnPID(-225, 100, -1);
+  DF(1900, 100);
+
+  
   }
 //Right Side & Red
   if(p == 2 && a == 4){
@@ -836,7 +889,7 @@ void autonomous(void) {
   flywheel.spin(forward, 100, percent);
   SR(4000);
   Intake.spin(reverse, 50,percent);
-  wait(0.2, sec);
+  wait(0.2, sec); 
   RollerMech();
   DR(80);
   TR(190); 
