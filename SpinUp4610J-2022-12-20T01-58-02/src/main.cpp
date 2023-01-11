@@ -837,10 +837,10 @@ void autonomous(void) {
   turnPIDCycle(-135, 100);
   turnPID(-135, 100, -1); 
   Intake.spin(forward, 100, percent);
-  DF(400, 100);
+  DF(500, 100);
   turnPIDCycle(-90, 100);
   turnPID(-90, 100, -1);
-  DFmotor(140, 100);
+  DFmotor(300, 100);
   wait(0.3, seconds); 
   DFmotor(10, 50);
   RollerMech();
@@ -857,10 +857,17 @@ void autonomous(void) {
   DF(500, 50);
   turnPIDCycle(-315, 100);
   turnPID(-315, 100, -1);
-  DF(450, 100);
+  DF(600, 100);
   turnPIDCycle(-268, 100);
   turnPID(-268, 100, -1);
+  DF(150, 100);
+  turnPIDCycle(-268, 100);
+  turnPID(-268, 100, -1);
+  wait(1, seconds);
   shootdiscs(3, 75);
+  turnPIDCycle(-180, 100); 
+  turnPID(-180, 100, -1);
+  DR(50);
   repeat (3){
     turnPIDCycle(-180, 100);
     turnPID(-180, 100, -1);
