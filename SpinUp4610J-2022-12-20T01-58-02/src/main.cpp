@@ -65,7 +65,7 @@ int RollerMecch(){
 }
 
 
-int botInDiscs(){
+/*int botInDiscs(){
   while(true){
     if(DiscSensor.objectDistance(mm)<70){
       takein=0;
@@ -75,7 +75,7 @@ int botInDiscs(){
   }
 }
 return(1);
-}
+}*/
 
 int p = 0;
 int a = 0;
@@ -298,7 +298,7 @@ void DR(float degs){
     bL.setStopping(hold);
     bR.setStopping(hold);
  }
-void intaketakein (){
+/*void intaketakein (){
   while(discsInBot<3){
     Intake.spin(forward, 100, percent);
     if(DiscSensor.objectDistance(mm)<36){
@@ -307,7 +307,7 @@ void intaketakein (){
   }
   Intake.stop();
 
-}
+}*/
 
 void SR(float degs){
   RightSide.setPosition(0,degrees);
@@ -434,16 +434,16 @@ void pre_auton(void) {
   discsInBot=0;
   wait(3,seconds);
   while(true){
-    thread t(botInDiscs);
+    //thread t(botInDiscs);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
 
-  Controller1.Screen.setCursor(1,1);
-  if(DiscSensor.objectDistance(mm)<70){
-  Controller1.Screen.print("3");
-  }
+  //Controller1.Screen.setCursor(1,1);
+  //if(DiscSensor.objectDistance(mm)<70){
+  //Controller1.Screen.print("3");
+  //}
   wait(50,msec); 
   Controller1.Screen.clearScreen();
   gui::thatthingyoupress RedSide(5,5);
@@ -848,7 +848,7 @@ void autonomous(void) {
   setTarget(-86.3 , 11);
   turnToTarget(100);
    shootdiscs(1, 82);
-   wait(1.5, seconds);
+   wait(1, seconds);
   shootdiscs(2, 89);
   turnPIDCycle(-260, 100);
   turnPID(-260, 100, -1); 
@@ -861,13 +861,13 @@ void autonomous(void) {
   turnPIDCycle(-268, 100);
   turnPID(-268, 100, -1);
   DF(150, 100);
-  turnPIDCycle(-268, 100);
-  turnPID(-268, 100, -1);
+  turnPIDCycle(-270, 100);
+  turnPID(-270, 100, -1);
   wait(1, seconds);
   shootdiscs(3, 75);
   turnPIDCycle(-180, 100); 
   turnPID(-180, 100, -1);
-  DR(50);
+  DR(200);
   repeat (3){
     turnPIDCycle(-180, 100);
     turnPID(-180, 100, -1);
@@ -964,7 +964,7 @@ void usercontrol(void) {
   shooter = 1;
   takein = 1;
   while (true) {
-    thread t(botInDiscs);
+    //thread t(botInDiscs);
     thread r(RollerMecch);
     thread a(backgroundTasks);
     fL.setStopping(hold);
@@ -981,22 +981,13 @@ fL.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
 bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
 bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
-if(DiscSensor.objectDistance(mm)<70){
+/*if(DiscSensor.objectDistance(mm)<70){
       takein=0;
     }
   else if (DiscSensor.objectDistance(mm)>70 && rishiethefishiehatesjews == 0){
       takein=1; 
-  }
+  }*/
 
-  if(Controller1.ButtonDown.pressing()){
-    while(Controller1.ButtonDown.pressing()){
-      wait(10,msec);
-    }      
-      takein=takein+1;
-    if(takein > 1){
-        takein=0;
-      }
-  }
   
    
     //if(Controller1.ButtonL1.pressing()){
@@ -1026,7 +1017,7 @@ if(DiscSensor.objectDistance(mm)<70){
     }  
 
     
-if(Controller1.ButtonY.pressing()){
+if(Controller1.ButtonY.pressing()){ 
       
     while(Controller1.ButtonY.pressing()){
         wait(10,msec);
@@ -1079,6 +1070,15 @@ if(Controller1.ButtonY.pressing()){
     setTarget(-86 , 1);
     turnToTarget(100);
     }
+  }
+if(Controller1.ButtonDown.pressing()){
+    while(Controller1.ButtonDown.pressing()){
+      wait(10,msec);
+    }      
+      takein=takein+1;
+    if(takein > 1){
+        takein=0;
+      }
   }
 
 
