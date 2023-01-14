@@ -605,7 +605,7 @@ void pre_auton(void) {
       Brain.Screen.print("Full WP");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("3");
+      Brain.Screen.print("Skills");
 
   }
   if(c == 1 && p == 2 && a == 4){
@@ -836,8 +836,8 @@ void autonomous(void) {
   DR(30);
   turnPIDCycle(-135, 100);
   turnPID(-135, 100, -1); 
-  Intake.spin(forward, 100, percent);
-  DF(500, 100);
+  Intake.spin(forward, 100, percent); 
+  DF(600, 100);
   turnPIDCycle(-90, 100);
   turnPID(-90, 100, -1);
   DFmotor(300, 100);
@@ -865,7 +865,14 @@ void autonomous(void) {
   turnPID(-270, 100, -1);
   wait(1, seconds);
   shootdiscs(3, 75);
-  turnPIDCycle(-180, 100); 
+  turnPIDCycle(-90, 100);
+  turnPID(-90, 100, -1);
+  DF(1000, 100);
+  turnPIDCycle(0, 100);
+  turnPID(0, 100, -1);
+  DR(30);
+  Endgame = 1;
+  /*turnPIDCycle(-180, 100); 
   turnPID(-180, 100, -1);
   DR(200);
   repeat (3){
@@ -881,7 +888,7 @@ void autonomous(void) {
   DR(100);
   turnPIDCycle(-225, 100);
   turnPID(-225, 100, -1);
-  DF(1900, 100);
+  DF(1900, 100);*/
 
   
   }
