@@ -236,8 +236,6 @@ void DF(float degs, int pwr){
   fL.setPosition(0, degrees);
   fwdAxis = 0;
     while (fwdAxis<degs){
-    
-
     fL.spin(forward, pwr, percent);
     bL.spin(forward, pwr, percent);
     fR.spin(forward, pwr, percent);
@@ -426,6 +424,22 @@ int backgroundTasks()
   }
   return 0;
 }
+void Dtoroller(){
+  while(!Optical4.isNearObject()){
+    fL.spin(forward, 100, percent);
+    bL.spin(forward, 100, percent);
+    fR.spin(forward, 100, percent);
+    bR.spin(forward, 100, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);
+}
 
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -439,7 +453,8 @@ void pre_auton(void) {
   Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
-
+  Optical4.setLight(ledState::on);
+  Optical4.setLightPower(100);
   //Controller1.Screen.setCursor(1,1);
   //if(DiscSensor.objectDistance(mm)<70){
   //Controller1.Screen.print("3");
@@ -557,7 +572,7 @@ void pre_auton(void) {
   }
   if(c == 1 && p == 1 && a == 1){
       Brain.Screen.setCursor(1, 36);
-      Brain.Screen.print("Red");
+      Brain.Screen.print("Red"); 
       Brain.Screen.setPenColor(black);
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
@@ -567,7 +582,7 @@ void pre_auton(void) {
       Brain.Screen.print("e");
       Brain.Screen.setPenColor(white);
       Brain.Screen.setCursor(3,36);
-      Brain.Screen.print("Full WP");
+      Brain.Screen.print("Oh Shit");
 
   }
   if(c == 1 && p == 1 && a == 2){
@@ -770,7 +785,42 @@ void autonomous(void) {
   thread t(forwardAxis);
   thread o(backgroundTasks);
   if(p == 1 && a == 1){
-  discsInBot=2;
+discsInBot=2;
+  flywheel.spin(forward, 92, percent);
+  DF(10, 100);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
+  Intake.stop();
+  wait(100, msec);
+  RollerMech();   
+  DR(30);
+  turnPIDCycle(-135, 100);
+  turnPID(-135, 100, -1); 
+  Intake.spin(forward, 100, percent); 
+  DF(650, 100);
+  turnPIDCycle(-90, 100);
+  turnPID(-90, 100, -1);
+  DFmotor(300, 100);
+  wait(0.3, seconds); 
+  DFmotor(10, 50);
+  wait(0.1, seconds);
+  RollerMech();
+  getDegToPoint(-86.3 , 11.5);
+  setTarget(-86.3 , 11.5);
+  turnToTarget(100);
+   shootdiscs(1, 82);
+   wait(1, seconds);
+  shootdiscs(2, 89);
+  turnPIDCycle(-260, 100);
+  turnPID(-260, 100, -1); 
+  Intake.spin(forward, 100, percent);
+  DF(400, 100);
+  DF(700, 50);
+  getDegToPoint(-86.3 , 11.5);
+  setTarget(-86.3 , 11.5);
+  turnToTarget(100);
+  shootdiscs(3, 90);
+  /*discsInBot=2;
   flywheel.spin(forward, 95, percent);
   DF(10, 100);
   Intake.spin(reverse, 50,percent);
@@ -784,11 +834,10 @@ void autonomous(void) {
   turnToTarget(100);
   shootdiscs(2, 93);
   //above is tested
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);  
+  turnPIDCycle(125, 100);
+  turnPID(125, 100, -1);  
   Intake.spin(forward,100,percent);
-  Intake.stop();
-  DF(3400, 100);
+  DF(5500, 100);
   wait(0.1, seconds);
   //turnPIDCycle(214, 100);
   //turnPID(214, 100, -1); 
@@ -797,11 +846,11 @@ void autonomous(void) {
   fL.spin(forward);
   fR.spin(forward);
   wait(0.7, seconds);
-  RollerMech();
+  RollerMech();*/
   }
   if(p == 1 && a == 2){
   discsInBot=2;
-  flywheel.spin(forward, 95, percent);
+  flywheel.spin(forward, 92, percent);
   DF(10, 100);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
@@ -809,20 +858,22 @@ void autonomous(void) {
   wait(100, msec);
   RollerMech();   
   DR(30); 
-  getDegToPoint(-86.3 , 12);
-  setTarget(-86.3 , 12);
-  turnToTarget(100);
+  //getDegToPoint(-86.3 , 10);
+  //setTarget(-86.3 , 10);
+  //turnToTarget(100);
+  turnPIDCycle(179, 100);
+  turnPID(179, 100, -1); 
   shootdiscs(2, 93);
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);  
+  turnPIDCycle(117, 100);
+  turnPID(117, 100, -1);  
   Intake.spin(forward,100,percent);
-  Intake.stop();
+  flywheel.spin(forward, 80, percent);
   DF(800, 100);
   wait(0.1, seconds);
-  DF(800, 50);
+  DF(1500, 50);
   turnPIDCycle(214, 100);
   turnPID(214, 100, -1); 
-  shootdiscs(3,90);
+  shootdiscs(3,79);
   }
   if(p == 1 && a == 3){
   discsInBot=2;
@@ -923,10 +974,10 @@ void autonomous(void) {
     shootdiscs(2, 95);
     turnPIDCycle(-90, 100);
     turnPID(-90, 100, 1500);
-    DF(350, 100);
+    DF(500, 100);
     turnPIDCycle(-180, 100);
     turnPID(-180, 100, -1);    
-    DF(65, 100);
+    Dtoroller();
     Intake.spin(reverse,25,percent);
     wait(0.5, sec);
     RollerMech();
@@ -970,11 +1021,12 @@ void usercontrol(void) {
   int deadband = 5;
   shooter = 1;
   takein = 1;
+  rishiethefishielovesjews = 1;
   while (true) {
     //thread t(botInDiscs);
     thread r(RollerMecch);
     thread a(backgroundTasks);
-    fL.setStopping(hold);
+    fL.setStopping(hold); 
     fR.setStopping(hold);
     bR.setStopping(hold);
     bL.setStopping(hold);
@@ -1016,7 +1068,7 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
       Intake.spin(reverse, 100, percent); 
     } 
  
-    if(Controller1.ButtonB.pressing()){
+    if(Controller1.ButtonR1.pressing()){
       wait(10, msec);
       Indexer = 1; 
       wait(150,msec);
@@ -1052,11 +1104,11 @@ if(Controller1.ButtonY.pressing()){
     }
     }
 
-    if(rishiethefishielovesjews == 1){
+    if(rishiethefishielovesjews == 0){
       flywheel.setVelocity(100, percent);
     }
-    if(rishiethefishielovesjews == 0){
-      flywheel.setVelocity(77, percent);
+    if(rishiethefishielovesjews == 1){
+      flywheel.setVelocity(70, percent);
     }
 
   if(Controller1.ButtonR2.pressing()){
