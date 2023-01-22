@@ -10,11 +10,7 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Expander11           triport       11              
-// RightSide            encoder       A, B            
-// LeftSide             encoder       C, D            
-// BackSide             encoder       E, F            
-// DiscSensor           line          A               
+// Vision8              vision        8               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -164,7 +160,7 @@ int drivePID(){
 
 
 /////////////////////////////////////////////////////////////////////////
-
+ 
     fL.spin(forward, lateralMotorPower + turnMotorPower, voltageUnits::volt);
     fR.spin(forward, lateralMotorPower - turnMotorPower, voltageUnits::volt);
     bL.spin(forward, lateralMotorPower + turnMotorPower, voltageUnits::volt);
@@ -451,8 +447,8 @@ void pre_auton(void) {
     //thread t(botInDiscs);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
-  Controller1.Screen.setCursor(2,1);
-  Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+  //Controller1.Screen.setCursor(2,1);
+  //Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
   Optical4.setLight(ledState::on);
   Optical4.setLightPower(100);
   //Controller1.Screen.setCursor(1,1);
@@ -476,7 +472,7 @@ void pre_auton(void) {
   Brain.Screen.setCursor(1,30);
   Brain.Screen.print("Color:");
   Brain.Screen.setCursor(2,31);
-  Brain.Screen.print("Side:");
+  Brain.Screen.print("Side:"); 
   Brain.Screen.setCursor(3,30);
   Brain.Screen.print("Auton:");
   if(RedSide.pressed()){
@@ -968,28 +964,30 @@ discsInBot=2;
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
     flywheel.spin(forward, 96, percent);
-    turnPIDCycle(-22, 50);
-    turnPID(-22, 50, -1);
+    turnPIDCycle(-22.2, 100);
+    turnPID(-22.2, 50, -1);
     wait(1.3, sec); 
-    shootdiscs(2, 95);
-    turnPIDCycle(-90, 100);
-    turnPID(-90, 100, 1500);
-    DF(500, 100);
+    shootdiscs(2, 97);
+    turnPIDCycle(-96, 100);
+    turnPID(-96, 100, 1500);
+    DF(400, 100);
     turnPIDCycle(-180, 100);
     turnPID(-180, 100, -1);    
     Dtoroller();
     Intake.spin(reverse,25,percent);
     wait(0.5, sec);
     RollerMech();
-    DR(30);
-    STR(550);
-    turnPIDCycle(-315, 100);
-    turnPID(-315, 100, 2000);   
+    DR(20);
+    turnPIDCycle(-270, 100);
+    turnPID(-270, 100, -1);
+    DF(200, 100);
+    turnPIDCycle(-320, 100);
+    turnPID(-320, 100, 2000);   
     Intake.spin(forward, 100, percent); 
-    DF(1250, 100);
-    turnPIDCycle(-410, 100);
-    turnPID(-410, 100, -1);
-    shootdiscs(4, 83);
+    DF(1650, 100);
+    turnPIDCycle(-400, 100);
+    turnPID(-395, 100, -1);
+    shootdiscs(4, 87);
   }
 }
 
@@ -997,7 +995,36 @@ discsInBot=2;
 int rishiethefishielovesjews = 0;
 int shooter = 0;
 
-
+int rishithefishilovesandhatesjews(){
+  if(Controller1.ButtonL2.pressing()){
+    if(p == 2){
+    getDegToPoint(-70.9 , -0.7);
+    setTarget(-70.9 , -0.7);
+    turnToTarget(100);
+    /*while(!Vision8.getSignature(PORT8, Vision8__REDHIGH)){
+      
+    fL.spin(forward, 100 , percent);
+    bL.spin(forward, 100, percent);
+    fR.spin(reverse, 100, percent);
+    bR.spin(reverse, 100, percent);
+    }
+    fL.stop();
+    fR.stop();
+    bL.stop();
+    bR.stop();
+    fL.setStopping(hold);
+    fR.setStopping(hold);
+    bL.setStopping(hold);
+    bR.setStopping(hold);*/
+    }
+    if(p == 1){
+    getDegToPoint(-86.3 , 1);
+    setTarget(-86 , 1);
+    turnToTarget(100);
+    }
+  }
+  return(1);
+}
 int test()
 {
   while (getTotalDistance() < 10)
@@ -1023,7 +1050,7 @@ void usercontrol(void) {
   takein = 1;
   rishiethefishielovesjews = 1;
   while (true) {
-    //thread t(botInDiscs);
+    thread t(rishithefishilovesandhatesjews);
     thread r(RollerMecch);
     thread a(backgroundTasks);
     fL.setStopping(hold); 
@@ -1108,7 +1135,7 @@ if(Controller1.ButtonY.pressing()){
       flywheel.setVelocity(100, percent);
     }
     if(rishiethefishielovesjews == 1){
-      flywheel.setVelocity(70, percent);
+      flywheel.setVelocity(72, percent);
     }
 
   if(Controller1.ButtonR2.pressing()){
@@ -1118,18 +1145,7 @@ if(Controller1.ButtonY.pressing()){
     Endgame = 0;
   }
   
-  if(Controller1.ButtonLeft.pressing()){
-    if(p == 2){
-    getDegToPoint(70.9 , -22.7);
-    setTarget(70.9 , -22.7);
-    turnToTarget(100);
-    }
-    if(p == 1){
-    getDegToPoint(-86.3 , 1);
-    setTarget(-86 , 1);
-    turnToTarget(100);
-    }
-  }
+  
 if(Controller1.ButtonDown.pressing()){
     while(Controller1.ButtonDown.pressing()){
       wait(10,msec);

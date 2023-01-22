@@ -2,7 +2,17 @@ using namespace vex;
 
 extern brain Brain;
 
+using signature = vision::signature;
+
 // VEXcode devices
+extern signature Vision8__REDHIGH;
+extern signature Vision8__BLUEHIGH;
+extern signature Vision8__SIG_3;
+extern signature Vision8__SIG_4;
+extern signature Vision8__SIG_5;
+extern signature Vision8__SIG_6;
+extern signature Vision8__SIG_7;
+extern vision Vision8;
 extern triport Expander11;
 extern encoder RightSide;
 extern encoder LeftSide;

@@ -110,6 +110,7 @@ double getDegToPoint(double x, double y)
 // Run in a parallel task during auton
 void updatePosition()
 {
+  
   // Get current values of encoders
   curLeft = getLeftReading();
   curRight = getRightReading();
