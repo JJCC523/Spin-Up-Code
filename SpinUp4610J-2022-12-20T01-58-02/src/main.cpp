@@ -846,30 +846,31 @@ discsInBot=2;
   }
   if(p == 1 && a == 2){
   discsInBot=2;
-  flywheel.spin(forward, 92, percent);
+  flywheel.spin(forward, 95, percent);
   DF(10, 100);
   Intake.spin(reverse, 50,percent);
   wait(0.4, sec); 
   Intake.stop();
   wait(100, msec);
   RollerMech();   
-  DR(30); 
+  DR(30);  
   //getDegToPoint(-86.3 , 10);
   //setTarget(-86.3 , 10);
   //turnToTarget(100);
-  turnPIDCycle(179, 100);
-  turnPID(179, 100, -1); 
-  shootdiscs(2, 93);
+  turnPIDCycle(176, 100);
+  turnPID(176, 100, -1); 
+  wait(0.3, seconds);
+  shootdiscs(2, 94);
   turnPIDCycle(117, 100);
   turnPID(117, 100, -1);  
   Intake.spin(forward,100,percent);
   flywheel.spin(forward, 80, percent);
-  DF(800, 100);
+  DF(900, 100);
   wait(0.1, seconds);
   DF(1500, 50);
-  turnPIDCycle(214, 100);
-  turnPID(214, 100, -1); 
-  shootdiscs(3,79);
+  turnPIDCycle(213, 100);
+  turnPID(213, 100, -1); 
+  shootdiscs(3,87);
   }
   if(p == 1 && a == 3){
   discsInBot=2;
