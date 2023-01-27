@@ -40,17 +40,17 @@ int RollerMecch(){
     rishiethefishiehatesjews = 1;
   if (c == 1){
     while(Optical4.color() != blue){
-      Intake.spin(reverse, 30, percent);
+      roller.spin(forward, 75, percent);
       }
-  Intake.stop();
+  roller.stop();
   takein = 2;
   rishiethefishiehatesjews = 0;
   }
   if (c == 2){
     while(Optical4.color() != red){
-      Intake.spin(reverse, 30, percent);
+      roller.spin(forward, 75, percent);
       }
-  Intake.stop();
+  roller.stop();
   takein = 2;
   rishiethefishiehatesjews = 0;
 
@@ -380,16 +380,16 @@ void STL(float degs){
 void RollerMech(){
   if (c == 1){
     while(Optical4.color() != blue){
-      Intake.spin(reverse, 30, percent);
+      roller.spin(forward, 75, percent);
       }
-  Intake.stop();
+  roller.stop();
   takein = 2;
   }
   if (c == 2){
     while(Optical4.color() != red){
-      Intake.spin(reverse, 30, percent);
+      roller.spin(forward, 75, percent);
       }
-  Intake.stop();
+  roller.stop();
   takein = 2;
   }
 }
@@ -1050,6 +1050,8 @@ void usercontrol(void) {
   shooter = 1;
   takein = 1;
   rishiethefishielovesjews = 1;
+  rishiethefishiehatesjews = 1;
+
   while (true) {
     thread t(rishithefishilovesandhatesjews);
     thread r(RollerMecch);
@@ -1133,10 +1135,10 @@ if(Controller1.ButtonY.pressing()){
     }
 
     if(rishiethefishielovesjews == 0){
-      flywheel.setVelocity(100, percent);
+      flywheel.setVelocity(72, percent);
     }
     if(rishiethefishielovesjews == 1){
-      flywheel.setVelocity(72, percent);
+      flywheel.setVelocity(60, percent);
     }
 
   if(Controller1.ButtonR2.pressing()){

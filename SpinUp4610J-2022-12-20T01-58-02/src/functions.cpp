@@ -80,7 +80,7 @@ double getRightReading() {
 }
 
 double getLeftReading() {
-  return ticksToInches(LeftSide.rotation(deg));
+  return ticksToInches(RightSide.rotation(deg));
 }
 
 

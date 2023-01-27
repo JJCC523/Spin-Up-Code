@@ -31,8 +31,9 @@ extern controller Controller1;
 extern motor_group Intake;
 extern digital_out Indexer;
 extern optical Optical4;
-extern motor_group flywheel;
+extern motor flywheel;
 extern digital_out Endgame;
+extern motor roller;
 
 
 /**

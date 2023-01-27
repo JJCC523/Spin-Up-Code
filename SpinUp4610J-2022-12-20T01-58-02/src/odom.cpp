@@ -2,8 +2,8 @@
 
 // tracking wheel perpendicular distances from true center of robot.
 // Seen at page 4 of Pilons odometry doc (http://thepilons.ca/wp-content/uploads/2018/10/Tracking.pdf)
-const double leftOffset =  6.875; // left
-const double rightOffset = 6.875; // right
+const double leftOffset =  1; // left
+const double rightOffset = 1; // right
 
 
 /*
@@ -39,7 +39,7 @@ float lastLeftPos = 0;
 float lastRightPos = 0;
 double lastInertialRadians = 0; // Angle (radians) returned by inertial sensor from last update
 
-// Change in tracking wheel encoder positions since last update
+// Change in tracking wheel encoder positions since last updates
 float deltaLeft = 0;
 float deltaRight = 0;
 
