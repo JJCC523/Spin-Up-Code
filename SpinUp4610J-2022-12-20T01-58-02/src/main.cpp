@@ -1089,6 +1089,8 @@ bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
     if(takein == 0){
       Intake.stop();
       Intake.setStopping(hold); 
+      roller.stop();
+      roller.setStopping(hold); 
     }
     
     if(Controller1.ButtonLeft.pressing()){
