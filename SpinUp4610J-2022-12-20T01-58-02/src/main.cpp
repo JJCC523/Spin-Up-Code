@@ -10,7 +10,7 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Vision8              vision        8               
+// GyroA                gyro          A               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -39,7 +39,7 @@ int RollerMecch(){
   if(Controller1.ButtonRight.pressing()){
     rishiethefishiehatesjews = 1;
   if (c == 1){
-    while(Optical4.color() != blue){
+    while(Optical4.color() != blue || Optical40.color() != blue){
       roller.spin(forward, 75, percent);
       }
   roller.stop();
@@ -47,7 +47,7 @@ int RollerMecch(){
   rishiethefishiehatesjews = 0;
   }
   if (c == 2){
-    while(Optical4.color() != red){
+    while(Optical4.color() != red || Optical40.color() != red){
       roller.spin(forward, 75, percent);
       }
   roller.stop();
@@ -436,21 +436,24 @@ void Dtoroller(){
     bL.setStopping(hold);
     bR.setStopping(hold);
 }
+int flypct = 50;
 
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   Inertial5.calibrate();
-  discsInBot=0;
+  discsInBot=0; 
   wait(3,seconds);
   while(true){
     //thread t(botInDiscs);
   Controller1.Screen.setCursor(1,1);
-  Controller1.Screen.print("RPM:%f",flywheel.velocity(rpm)*5);
+  Controller1.Screen.print("RPM:%d",flypct);
   //Controller1.Screen.setCursor(2,1);
   //Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
   Optical4.setLight(ledState::on);
   Optical4.setLightPower(100);
+  Optical40.setLight(ledState::on);
+  Optical40.setLightPower(100);
   //Controller1.Screen.setCursor(1,1);
   //if(DiscSensor.objectDistance(mm)<70){
   //Controller1.Screen.print("3");
@@ -846,31 +849,19 @@ discsInBot=2;
   }
   if(p == 1 && a == 2){
   discsInBot=2;
-  flywheel.spin(forward, 95, percent);
-  DF(10, 100);
-  Intake.spin(reverse, 50,percent);
-  wait(0.4, sec); 
-  Intake.stop();
-  wait(100, msec);
-  RollerMech();   
-  DR(30);  
-  //getDegToPoint(-86.3 , 10);
-  //setTarget(-86.3 , 10);
-  //turnToTarget(100);
-  turnPIDCycle(176, 100);
-  turnPID(176, 100, -1); 
-  wait(0.3, seconds);
+  flywheel.spin(forward, 100, volt);
+  DR(10);
+  roller.spinFor(forward, 200, degrees);
+  wait(5, seconds);
   shootdiscs(2, 94);
-  turnPIDCycle(117, 100);
-  turnPID(117, 100, -1);  
+  DFmotor(10, 50);
+  turnPIDCycle(-45, 100);
+  turnPID(-45, 100, -1);  
   Intake.spin(forward,100,percent);
-  flywheel.spin(forward, 80, percent);
-  DF(900, 100);
+  flywheel.spin(forward, 100, volt);
+  DFmotor(400, 100);
+  DFmotor(400, 70);
   wait(0.1, seconds);
-  DF(1500, 50);
-  turnPIDCycle(213, 100);
-  turnPID(213, 100, -1); 
-  shootdiscs(3,87);
   }
   if(p == 1 && a == 3){
   discsInBot=2;
@@ -997,12 +988,12 @@ int rishiethefishielovesjews = 0;
 int shooter = 0;
 
 int rishithefishilovesandhatesjews(){
-  if(Controller1.ButtonL2.pressing()){
+  /*if(Controller1.ButtonL2.pressing()){
     if(p == 2){
     getDegToPoint(-70.9 , -0.7);
     setTarget(-70.9 , -0.7);
     turnToTarget(100);
-    /*while(!Vision8.getSignature(PORT8, Vision8__REDHIGH)){
+    while(!Vision8.getSignature(PORT8, Vision8__REDHIGH)){
       
     fL.spin(forward, 100 , percent);
     bL.spin(forward, 100, percent);
@@ -1016,14 +1007,14 @@ int rishithefishilovesandhatesjews(){
     fL.setStopping(hold);
     fR.setStopping(hold);
     bL.setStopping(hold);
-    bR.setStopping(hold);*/
+    bR.setStopping(hold);
     }
     if(p == 1){
     getDegToPoint(-86.3 , 1);
     setTarget(-86 , 1);
     turnToTarget(100);
     }
-  }
+  }*/
   return(1);
 }
 int test()
@@ -1038,6 +1029,7 @@ int test()
 
   return 0;
 }
+
 
 void usercontrol(void) {
   enableDrivePID= false;
@@ -1135,13 +1127,24 @@ if(Controller1.ButtonY.pressing()){
       rishiethefishielovesjews = 0;
     }
     }
-
+ 
     if(rishiethefishielovesjews == 0){
-      flywheel.setVelocity(72, percent);
+flypct = 80;
+
     }
     if(rishiethefishielovesjews == 1){
-      flywheel.setVelocity(60, percent);
+flypct = 50;
+
     }
+    if(Controller1.ButtonL2.pressing()){
+      while(Controller1.ButtonL2.pressing()){
+        wait(10, msec);
+      }
+      flypct=flypct+5;
+  }
+  if (flypct > 50 && flypct<80){
+    rishiethefishielovesjews = -1;
+  }
 
   if(Controller1.ButtonR2.pressing()){
     wait(10, msec);
@@ -1161,6 +1164,7 @@ if(Controller1.ButtonDown.pressing()){
       }
   }
 
+  flywheel.setVelocity(flypct, percent);
 
     wait(25, msec);
   }
