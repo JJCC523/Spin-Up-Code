@@ -441,6 +441,8 @@ int flypct = 50;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  Indexer = 0;
+  Endgame = 0;
   Inertial5.calibrate();
   discsInBot=0; 
   wait(3,seconds);
@@ -777,7 +779,7 @@ void pre_auton(void) {
   // Example: clearing encoders, setting servo positions, ...
 }
 
-
+ 
 
 void autonomous(void) {
   setStartingPos(0, 0);
@@ -960,16 +962,14 @@ discsInBot=2;
     turnPID(-22.2, 50, -1);
     wait(1.3, sec); 
     shootdiscs(2, 97);
-    turnPIDCycle(-96, 100);
-    turnPID(-96, 100, 1500);
+    turnPIDCycle(-90, 100);
+    turnPID(-90, 100, 1500);
     DF(400, 100);
-    turnPIDCycle(-180, 100);
-    turnPID(-180, 100, -1);    
+    turnPIDCycle(0, 100);
+    turnPID(0, 100, -1);    
     Dtoroller();
-    Intake.spin(reverse,25,percent);
-    wait(0.5, sec);
-    RollerMech();
-    DR(20);
+    roller.spinFor(forward, 300, degrees);
+    DFmotor(5, 100);
     turnPIDCycle(-270, 100);
     turnPID(-270, 100, -1);
     DF(200, 100);
