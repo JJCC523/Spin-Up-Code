@@ -230,8 +230,9 @@ void DF(float degs, int pwr){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
   fL.setPosition(0, degrees);
-  fwdAxis = 0;
-    while (fwdAxis<degs){
+  float fwdthingy =  (RightSide.position(degrees)+LeftSide.position(degrees))/2;
+    while (fwdthingy<degs){
+    fwdthingy =  (RightSide.position(degrees)+LeftSide.position(degrees))/2;
     fL.spin(forward, pwr, percent);
     bL.spin(forward, pwr, percent);
     fR.spin(forward, pwr, percent);
@@ -443,6 +444,7 @@ void pre_auton(void) {
   vexcodeInit();
   Indexer = 0;
   Endgame = 0;
+  Endgame2 = 0;
   Inertial5.calibrate();
   discsInBot=0; 
   wait(3,seconds);
@@ -450,8 +452,8 @@ void pre_auton(void) {
     //thread t(botInDiscs);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%d",flypct);
-  //Controller1.Screen.setCursor(2,1);
-  //Controller1.Screen.print("Temp:%f",flywheel.temperature(celsius));
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print("Temp:%f",flywheel.velocity(rpm)*6 );
   Optical4.setLight(ledState::on);
   Optical4.setLightPower(100);
   Optical40.setLight(ledState::on);
@@ -785,8 +787,9 @@ void autonomous(void) {
   setStartingPos(0, 0);
   thread t(forwardAxis);
   thread o(backgroundTasks);
+  
   if(p == 1 && a == 1){
-discsInBot=2;
+/*discsInBot=2;
   flywheel.spin(forward, 92, percent);
   DF(10, 100);
   Intake.spin(reverse, 50,percent);
@@ -820,37 +823,28 @@ discsInBot=2;
   getDegToPoint(-86.3 , 11.5);
   setTarget(-86.3 , 11.5);
   turnToTarget(100);
-  shootdiscs(3, 90);
-  /*discsInBot=2;
-  flywheel.spin(forward, 95, percent);
-  DF(10, 100);
-  Intake.spin(reverse, 50,percent);
-  wait(0.4, sec); 
-  Intake.stop();
-  wait(100, msec);
-  RollerMech();   
-  DR(30); 
-  getDegToPoint(-86.3 , 12);
-  setTarget(-86.3 , 12);
-  turnToTarget(100);
-  shootdiscs(2, 93);
-  //above is tested
-  turnPIDCycle(125, 100);
-  turnPID(125, 100, -1);  
-  Intake.spin(forward,100,percent);
-  DF(5500, 100);
+  shootdiscs(3, 90);*/
+  flywheel.spin(forward, 100, volt);
+  DR(10);
+  roller.spinFor(forward, 200, degrees);
+  DFmotor(10, 50);
+  turnPIDCycle(-45, 100);
+  turnPID(-45, 100, -1);  
+  Intake.spin(reverse,100,percent);
+  flywheel.spin(forward, 100, volt);
+  DFmotor(550, 100);
   wait(0.1, seconds);
-  //turnPIDCycle(214, 100);
-  //turnPID(214, 100, -1); 
-  //shootdiscs(3,90);
-  TR(35);
-  fL.spin(forward);
-  fR.spin(forward);
-  wait(0.7, seconds);
-  RollerMech();*/
+  DFmotor(750, 50);
+  wait(0.1, seconds);
+  turnPIDCycle(40, 100);
+  turnPID(40, 100, -1);  
+  shootdiscs(2, 94);
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1);
+  //DR(1100);
+  roller.spinFor(forward, 200, degrees);
   }
   if(p == 1 && a == 2){
-  discsInBot=2;
   flywheel.spin(forward, 100, volt);
   DR(10);
   roller.spinFor(forward, 200, degrees);
@@ -861,58 +855,39 @@ discsInBot=2;
   turnPID(-45, 100, -1);  
   Intake.spin(forward,100,percent);
   flywheel.spin(forward, 100, volt);
-  DFmotor(400, 100);
-  DFmotor(400, 70);
+  DFmotor(550, 100);
   wait(0.1, seconds);
+  DFmotor(750, 50);
+  wait(0.1, seconds);
+  turnPIDCycle(45, 100);
+  turnPID(45, 100, -1);  
+  shootdiscs(2, 94);
   }
   if(p == 1 && a == 3){
-  discsInBot=2;
-  flywheel.spin(forward, 92, percent);
-  DF(10, 100);
-  Intake.spin(reverse, 50,percent);
-  wait(0.4, sec); 
-  Intake.stop();
-  wait(100, msec);
-  RollerMech();   
-  DR(30);
-  turnPIDCycle(-135, 100);
-  turnPID(-135, 100, -1); 
-  Intake.spin(forward, 100, percent); 
-  DF(600, 100);
-  turnPIDCycle(-90, 100);
-  turnPID(-90, 100, -1);
-  DFmotor(300, 100);
-  wait(0.3, seconds); 
-  DFmotor(10, 50);
-  RollerMech();
-  getDegToPoint(-86.3 , 11);
-  setTarget(-86.3 , 11);
-  turnToTarget(100);
-   shootdiscs(1, 82);
-   wait(1, seconds);
-  shootdiscs(2, 89);
-  turnPIDCycle(-260, 100);
-  turnPID(-260, 100, -1); 
-  Intake.spin(forward, 100, percent);
-  DF(400, 100);
-  DF(500, 50);
-  turnPIDCycle(-315, 100);
-  turnPID(-315, 100, -1);
-  DF(600, 100);
-  turnPIDCycle(-268, 100);
-  turnPID(-268, 100, -1);
-  DF(150, 100);
-  turnPIDCycle(-270, 100);
-  turnPID(-270, 100, -1);
-  wait(1, seconds);
-  shootdiscs(3, 75);
-  turnPIDCycle(-90, 100);
-  turnPID(-90, 100, -1);
-  DF(1000, 100);
-  turnPIDCycle(0, 100);
-  turnPID(0, 100, -1);
-  DR(30);
-  Endgame = 1;
+  flywheel.spin(forward, 100, volt);
+  DR(10);
+  roller.spinFor(forward, 500, degrees);
+  wait(4, seconds);
+  shootdiscs(2, 94);
+  DFmotor(10, 50); 
+  turnPIDCycle(-45, 100);
+  turnPID(-45, 100, -1);  
+  Intake.spin(forward,100,percent);
+  flywheel.spin(forward, 100, volt);
+  DFmotor(550, 100);
+  wait(0.1, seconds);
+  DFmotor(750, 50);
+  wait(0.1, seconds);
+  turnPIDCycle(45, 100);
+  turnPID(45, 100, -1);  
+  shootdiscs(2, 94);
+  turnPIDCycle(-47, 100);
+  turnPID(-47, 100, -1); 
+  DR(1000);
+  roller.spinFor(forward, 500, degrees);
+  turnPIDCycle(135, 100);
+  turnPID(135, 100, -1); 
+  //Endgame = 1;
   /*turnPIDCycle(-180, 100); 
   turnPID(-180, 100, -1);
   DR(200);
@@ -958,27 +933,26 @@ discsInBot=2;
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
     flywheel.spin(forward, 96, percent);
-    turnPIDCycle(-22.2, 100);
-    turnPID(-22.2, 50, -1);
+    turnPIDCycle(-19.2, 100);
+    turnPID(-19.2, 50, -1);
     wait(1.3, sec); 
     shootdiscs(2, 97);
     turnPIDCycle(-90, 100);
     turnPID(-90, 100, 1500);
-    DF(400, 100);
+    DFmotor(400, 100);
+    turnPIDCycle(0, 100);
     turnPIDCycle(0, 100);
     turnPID(0, 100, -1);    
-    Dtoroller();
+    DR(100);
     roller.spinFor(forward, 300, degrees);
     DFmotor(5, 100);
-    turnPIDCycle(-270, 100);
-    turnPID(-270, 100, -1);
-    DF(200, 100);
-    turnPIDCycle(-320, 100);
-    turnPID(-320, 100, 2000);   
+    turnPIDCycle(45, 100);
+    turnPID(45, 100, -1);
     Intake.spin(forward, 100, percent); 
-    DF(1650, 100);
-    turnPIDCycle(-400, 100);
-    turnPID(-395, 100, -1);
+    DFmotor(200, 100);
+    DFmotor(600, 40);
+    turnPIDCycle(-45, 100);
+    turnPID(-45, 100, 2000);   
     shootdiscs(4, 87);
   }
 }
@@ -1136,8 +1110,8 @@ flypct = 80;
 flypct = 50;
 
     }
-    if(Controller1.ButtonL2.pressing()){
-      while(Controller1.ButtonL2.pressing()){
+    if(Controller1.ButtonUp.pressing()){
+      while(Controller1.ButtonUp.pressing()){
         wait(10, msec);
       }
       flypct=flypct+5;
@@ -1152,7 +1126,12 @@ flypct = 50;
     wait(150,msec);
     Endgame = 0;
   }
-  
+  if(Controller1.ButtonL2.pressing()){
+    wait(10, msec);
+    Endgame2 = 1; 
+    wait(150,msec);
+    Endgame2 = 0;
+  }
   
 if(Controller1.ButtonDown.pressing()){
     while(Controller1.ButtonDown.pressing()){

@@ -32,6 +32,7 @@ optical Optical4 = optical(PORT11);
 optical Optical40 = optical(PORT20);
 motor flywheel = motor(PORT10, ratio6_1, false);
 digital_out Endgame = digital_out(Brain.ThreeWirePort.F);
+digital_out Endgame2 = digital_out(Brain.ThreeWirePort.G);
 motor roller = motor(PORT6, ratio6_1, true);
 
 

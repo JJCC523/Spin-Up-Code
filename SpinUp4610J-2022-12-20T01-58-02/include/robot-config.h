@@ -34,6 +34,7 @@ extern optical Optical4;
 extern optical Optical40;
 extern motor flywheel;
 extern digital_out Endgame;
+extern digital_out Endgame2;
 extern motor roller;
 
 
