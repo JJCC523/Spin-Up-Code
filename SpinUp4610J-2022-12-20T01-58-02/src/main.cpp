@@ -422,11 +422,11 @@ int backgroundTasks()
   return 0;
 }
 void Dtoroller(){
-  while(!Optical4.isNearObject()){
-    fL.spin(forward, 100, percent);
-    bL.spin(forward, 100, percent);
-    fR.spin(forward, 100, percent);
-    bR.spin(forward, 100, percent);
+  while(!Optical4.isNearObject() or !Optical40.isNearObject()){
+    fL.spin(reverse, 100, percent);
+    bL.spin(reverse, 100, percent);
+    fR.spin(reverse, 100, percent);
+    bR.spin(reverse, 100, percent);
     }
     fL.stop();
     fR.stop();
@@ -845,14 +845,15 @@ void autonomous(void) {
   roller.spinFor(forward, 200, degrees);
   }
   if(p == 1 && a == 2){
-  flywheel.spin(forward, 40, percent);
+  flywheel.spin(forward, 96, percent);
   DR(10);
   roller.spinFor(forward, 400, degrees);
-  turnPIDCycle(-90, 100);
-  turnPID(-90, 100, -1);  
+  turnPIDCycle(5, 100);
+  turnPID(5, 100, -1); 
+  
   wait(3, seconds);
-  shootdiscs(2, 40);
-  /*DFmotor(10, 50);
+  shootdiscs(2, 96);
+  DFmotor(10, 50);
   turnPIDCycle(-45, 100);
   turnPID(-45, 100, -1);  
   Intake.spin(forward,100,percent);
@@ -863,7 +864,7 @@ void autonomous(void) {
   wait(0.1, seconds);
   turnPIDCycle(45, 100);
   turnPID(45, 100, -1);  
-  shootdiscs(2, 94);*/
+  shootdiscs(2, 94);
   }
   if(p == 1 && a == 3){
   flywheel.spin(forward, 100, volt);
@@ -937,17 +938,16 @@ void autonomous(void) {
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
     flywheel.spin(forward, 96, percent);
-    turnPIDCycle(-19.2, 100);
-    turnPID(-19.2, 50, -1);
+    turnPIDCycle(-12, 100);
+    turnPID(-12, 100, -1);
     wait(1.3, sec); 
     shootdiscs(2, 97);
-    turnPIDCycle(-90, 100);
-    turnPID(-90, 100, 1500);
-    DFmotor(400, 100);
-    turnPIDCycle(0, 100);
-    turnPIDCycle(0, 100);
-    turnPID(0, 100, -1);    
-    DR(100);
+    turnPIDCycle(-85, 100);
+    turnPID(-85, 100, 1500);
+    DFmotor(300, 100);
+;    turnPIDCycle(0, 100);
+    turnPID(0, 100, -1);     
+    Dtoroller();
     roller.spinFor(forward, 300, degrees);
     DFmotor(5, 100);
     turnPIDCycle(45, 100);
@@ -1160,6 +1160,14 @@ if(Controller1.ButtonR2.pressing()){
       rishithefishilovesandhatesjewsbutmainlyhatesjews=rishithefishilovesandhatesjewsbutmainlyhatesjews+1;
   }
 
+  if(Controller1.ButtonR2.pressing() && Controller1.ButtonL2.pressing()){
+    while(Controller1.ButtonR2.pressing() && Controller1.ButtonL2.pressing()){
+      wait(10,msec);
+    }      
+      Endgame = 1;
+      Endgame2 = 1;
+  }
+  
   flywheel.setVelocity(flypct, percent);
 
     wait(25, msec);
