@@ -404,7 +404,7 @@ void shootdiscs(int discs, int flypower){
       Indexer = 0;
       discs_shot = discs_shot+1;
       discsInBot = discsInBot - 1;
-      wait(1,seconds);
+      wait(1.5,seconds);
     }
 }
 
@@ -937,13 +937,13 @@ void autonomous(void) {
   }
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
-    flywheel.spin(forward, 96, percent);
+    flywheel.spin(forward, 100, percent);
     turnPIDCycle(-12, 100);
     turnPID(-12, 100, -1);
-    wait(1.3, sec); 
-    shootdiscs(2, 97);
-    turnPIDCycle(-85, 100);
-    turnPID(-85, 100, 1500);
+    wait(4, sec); 
+    shootdiscs(2, 100);
+    turnPIDCycle(-80, 100);
+    turnPID(-80, 100, 1500);
     DFmotor(300, 100);
 ;    turnPIDCycle(0, 100);
     turnPID(0, 100, -1);     
@@ -1190,6 +1190,6 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
-    wait(100, msec);
+    wait(100, msec); 
   }
 }
