@@ -422,7 +422,7 @@ int backgroundTasks()
   return 0;
 }
 void Dtoroller(){
-  while(!Optical4.isNearObject() or !Optical40.isNearObject()){
+  while(!Optical40.isNearObject()){
     fL.spin(reverse, 100, percent);
     bL.spin(reverse, 100, percent);
     fR.spin(reverse, 100, percent);
@@ -845,14 +845,9 @@ void autonomous(void) {
   roller.spinFor(forward, 200, degrees);
   }
   if(p == 1 && a == 2){
-  flywheel.spin(forward, 96, percent);
+  flywheel.spin(forward, 100, percent);
   DR(10);
   roller.spinFor(forward, 400, degrees);
-  turnPIDCycle(5, 100);
-  turnPID(5, 100, -1); 
-  
-  wait(3, seconds);
-  shootdiscs(2, 96);
   DFmotor(10, 50);
   turnPIDCycle(-45, 100);
   turnPID(-45, 100, -1);  
@@ -860,11 +855,12 @@ void autonomous(void) {
   flywheel.spin(forward, 100, volt);
   DFmotor(550, 100);
   wait(0.1, seconds);
-  DFmotor(750, 50);
+  DFmotor(200, 50);
   wait(0.1, seconds);
-  turnPIDCycle(45, 100);
-  turnPID(45, 100, -1);  
-  shootdiscs(2, 94);
+  turnPIDCycle(20, 100);
+  turnPID(20, 100, -1);  
+  wait(0.5, seconds);
+  shootdiscs(3, 94);
   }
   if(p == 1 && a == 3){
   flywheel.spin(forward, 100, volt);
@@ -937,27 +933,23 @@ void autonomous(void) {
   }
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
-    flywheel.spin(forward, 100, percent);
-    turnPIDCycle(-12, 100);
-    turnPID(-12, 100, -1);
-    wait(4, sec); 
-    shootdiscs(2, 100);
+    flywheel.spin(forward, 80, percent);
     turnPIDCycle(-80, 100);
     turnPID(-80, 100, 1500);
     DFmotor(300, 100);
-;    turnPIDCycle(0, 100);
+    turnPIDCycle(0, 100);
     turnPID(0, 100, -1);     
     Dtoroller();
-    roller.spinFor(forward, 300, degrees);
+    roller.spinFor(forward, 400, degrees);
     DFmotor(5, 100);
     turnPIDCycle(45, 100);
     turnPID(45, 100, -1);
     Intake.spin(forward, 100, percent); 
     DFmotor(200, 100);
     DFmotor(600, 40);
-    turnPIDCycle(-45, 100);
-    turnPID(-45, 100, 2000);   
-    shootdiscs(4, 87);
+    turnPIDCycle(-21, 100);
+    turnPID(-21, 100, 2000);   
+    shootdiscs(3, 80);
   }
 }
 
