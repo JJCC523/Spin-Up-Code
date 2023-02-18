@@ -14,7 +14,7 @@ signature Vision8__BLUEHIGH = signature (2, -1917, 1, -958, 1737, 7149, 4443, 0.
 vision Vision8 = vision (PORT8, 50, Vision8__REDHIGH, Vision8__BLUEHIGH);
 triport Expander11 = triport(PORT11); 
 encoder RightSide = encoder(Brain.ThreeWirePort.A);
-encoder LeftSide = encoder(Brain.ThreeWirePort.C);
+//encoder LeftSide = encoder(Brain.ThreeWirePort.C);
 encoder BackSide = encoder(Brain.ThreeWirePort.E);
 //distance DiscSensor = distance(PORT12);
 motor fL = motor(PORT14, ratio18_1, true);
@@ -25,6 +25,7 @@ motor bR = motor(PORT8, ratio6_1, false);
 inertial Inertial5 = inertial(PORT19);
 inertial Inertial4 = inertial(PORT18);
 controller Controller1 = controller(primary);
+controller endgame = controller(partner);
 motor IntakeMotorA = motor(PORT2, ratio6_1, true);
 motor IntakeMotorB = motor(PORT13, ratio6_1, false);
 motor_group Intake = motor_group(IntakeMotorA, IntakeMotorB);
@@ -33,6 +34,7 @@ optical Optical40 = optical(PORT20);
 motor flywheel = motor(PORT10, ratio6_1, false);
 digital_out Endgame = digital_out(Brain.ThreeWirePort.F);
 digital_out Endgame2 = digital_out(Brain.ThreeWirePort.G);
+digital_out Wall = digital_out(Brain.ThreeWirePort.C);
 motor roller = motor(PORT6, ratio6_1, true);
 
 

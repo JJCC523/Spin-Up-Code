@@ -15,7 +15,7 @@ extern signature Vision8__SIG_7;
 extern vision Vision8;
 extern triport Expander11;
 extern encoder RightSide;
-extern encoder LeftSide;
+//extern encoder LeftSide;
 extern encoder BackSide;
 //extern distance DiscSensor;
 extern motor fL;
@@ -28,6 +28,7 @@ extern encoder RightSide;
 extern encoder LeftSide;
 extern encoder BackSide;
 extern controller Controller1;
+extern controller endgame;
 extern motor_group Intake;
 extern digital_out Indexer;
 extern optical Optical4;
@@ -35,6 +36,7 @@ extern optical Optical40;
 extern motor flywheel;
 extern digital_out Endgame;
 extern digital_out Endgame2;
+extern digital_out Wall;
 extern motor roller;
 
 

@@ -19,6 +19,7 @@
 
 #include "functions.h"
 #include "odom.h"
+#include "footy.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
