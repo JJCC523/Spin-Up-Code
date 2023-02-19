@@ -1055,27 +1055,27 @@ void usercontrol(void) {
   }
 
   
-  if(endgame.ButtonL1.pressing() && endgame_safe == 1){
-    while(endgame.ButtonL1.pressing()){
+  if(Controller1.ButtonL1.pressing() && endgame_safe == 1){
+    while(Controller1.ButtonL1.pressing()){
       wait(10,msec);
     }      
     Wall = 0;
   }
-  if(endgame.ButtonL2.pressing() && endgame.ButtonR2.pressing()){
-    while(endgame.ButtonL2.pressing() && endgame.ButtonR2.pressing()){
+  if(Controller1.ButtonL2.pressing() && Controller1.ButtonR2.pressing()){
+    while(Controller1.ButtonL2.pressing() && Controller1.ButtonR2.pressing()){
       wait(10,msec);
     }      
       endgame_safe=endgame_safe+1;
   }
 
-  if(endgame.ButtonL2.pressing() && endgame_safe == 1){
-    while(endgame.ButtonL2.pressing()){
+  if(Controller1.ButtonL2.pressing() && endgame_safe == 1){
+    while(Controller1.ButtonL2.pressing()){
       wait(10,msec);
     }      
       leftendgame=leftendgame+1;
   }
-  if(endgame.ButtonR2.pressing() && endgame_safe == 1){
-    while(endgame.ButtonR2.pressing()){
+  if(Controller1.ButtonR2.pressing() && endgame_safe == 1){
+    while(Controller1.ButtonR2.pressing()){
       wait(10,msec);
     }      
       rightendgame=rightendgame+1;
