@@ -269,7 +269,7 @@ double turnPIDCycle(double targetDegree, double maxSpeed)
   double integralPowerLimit =
       40 / Ki;                   // little less than half power
   double integralActiveZone = 15; // degrees to start accumulating to integral
-  double errorThreshold = 0.5; // Exit loop when error is less than this
+  double errorThreshold = 0.25; // Exit loop when error is less than this
 
   double speed = 0;
 

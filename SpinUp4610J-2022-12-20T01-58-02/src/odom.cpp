@@ -176,7 +176,7 @@ void updatePositionGPS()
 void setTarget(double x, double y)
 {
   targetX = x;
-  targetY = y;
+  targetY = y; 
 }
 
 
