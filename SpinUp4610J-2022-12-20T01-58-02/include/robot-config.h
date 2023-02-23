@@ -17,7 +17,7 @@ extern triport Expander11;
 extern encoder xEncoder;
 //extern encoder LeftSide;
 extern encoder yEncoder;
-extern distance DiscSensor;
+//extern distance DiscSensor;
 extern motor fL;
 extern motor fL;
 extern motor bL;
@@ -36,7 +36,7 @@ extern optical Optical40;
 extern motor flywheel;
 extern digital_out Endgame;
 extern digital_out Endgame2;
-extern digital_out Wall;
+//extern digital_out Wall;
 extern motor roller;
 
 

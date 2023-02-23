@@ -384,6 +384,8 @@ void Dtoroller(){
     bL.setStopping(hold);
     bR.setStopping(hold);
 }
+digital_out Wall = digital_out(Brain.ThreeWirePort.C);
+distance DiscSensor = distance(PORT9);
 int flypct = 50;
 
 int discDistance;
