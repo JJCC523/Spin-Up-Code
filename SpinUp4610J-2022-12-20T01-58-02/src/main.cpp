@@ -391,13 +391,13 @@ int discDistance;
 int detectDisc(){
   while(true){
     discDistance = DiscSensor.objectDistance(mm);
-  if(discDistance > 50){
+  if(discDistance > 90){
     Indexer = 1;
   }
   else{
     Indexer = 0;
   }
-  wait (0.2, seconds);
+  wait (0.2, seconds); 
   return discDistance;
   }
 }
