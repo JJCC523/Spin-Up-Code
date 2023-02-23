@@ -386,6 +386,21 @@ void Dtoroller(){
 }
 int flypct = 50;
 
+int discDistance;
+
+int detectDisc(){
+  while(true){
+    discDistance = DiscSensor.objectDistance(mm);
+  if(discDistance > 50){
+    Indexer = 1;
+  }
+  else{
+    Indexer = 0;
+  }
+  wait (0.2, seconds);
+  return discDistance;
+  }
+}
 
 
 void pre_auton(void) {
@@ -399,7 +414,7 @@ void pre_auton(void) {
   discsInBot=0; 
   wait(3,seconds);
   while(true){
-    //thread t(botInDiscs);
+    thread t(detectDisc);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%d",flypct);
   Controller1.Screen.setCursor(2,1);
@@ -874,7 +889,7 @@ void autonomous(void) {
   }
 }
 
-  
+
 int rishiethefishielovesjews = 0;
 int shooter = 0;
 

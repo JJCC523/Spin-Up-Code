@@ -17,7 +17,7 @@ extern triport Expander11;
 extern encoder xEncoder;
 //extern encoder LeftSide;
 extern encoder yEncoder;
-//extern distance DiscSensor;
+extern distance DiscSensor;
 extern motor fL;
 extern motor fL;
 extern motor bL;
