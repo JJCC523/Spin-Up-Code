@@ -76,11 +76,11 @@ void resetTotalDistance()
 
 // Obtain the current values of the tracking wheel encoders
 double getRightReading() {
-  return ticksToInches(RightSide.rotation(deg)); // negative because right encoder is backwards
+  return ticksToInches(xEncoder.rotation(deg)); // negative because right encoder is backwards
 }
 
 double getLeftReading() {
-  return ticksToInches(RightSide.rotation(deg));
+  return ticksToInches(xEncoder.rotation(deg));
 }
 
 

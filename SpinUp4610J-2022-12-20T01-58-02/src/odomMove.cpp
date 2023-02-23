@@ -1,4 +1,4 @@
-#include "vex.h"
+/*#include "vex.h"
 #include "odomtrack.cpp"
 
 double targetDeg = 0;
@@ -65,7 +65,7 @@ void MTP(float getX, float getY, double maxFwdSpeed, double maxTurnSpeed)
 
   targetDistance = getDistanceTo(getX, getY);
 
-   while (curFwdSpeed != 0 && fabs(targetDistance) > 3/* && !isStopped()*/)
+   while (curFwdSpeed != 0 && fabs(targetDistance) > 3
   {
     targetDistance = getDistanceTo(getX, getY);
     targetDeg = getDegToPoint(getX, getY);
@@ -77,4 +77,4 @@ void MTP(float getX, float getY, double maxFwdSpeed, double maxTurnSpeed)
     Brain.Screen.printAt(210, 120, "target: (%.1f, %.1f) %.1f deg", getX, getY, targetDeg);
     task::sleep(5);
   }
-}
+}*/

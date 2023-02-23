@@ -416,7 +416,6 @@ void pre_auton(void) {
   discsInBot=0; 
   wait(3,seconds);
   while(true){
-    thread t(detectDisc);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%d",flypct);
   Controller1.Screen.setCursor(2,1);
@@ -961,6 +960,7 @@ void usercontrol(void) {
     thread t(rishithefishilovesandhatesjews);
     thread r(RollerMecch);
     thread a(backgroundTasks);
+    thread k(detectDisc);
     fL.setStopping(hold); 
     fR.setStopping(hold);
     bR.setStopping(hold);
