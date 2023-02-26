@@ -28,11 +28,11 @@ int forwardAxis(){
     fwdAxis = (RightSide.position(degrees)+LeftSide.position(degrees))/2;
   }
   return(1);
-  }
-  int takein=0;
-  int discsInBot = 0;
-  int rishiethefishiehatesjews = 0;
-  int c = 0;
+}
+int takein=0;
+int discsInBot = 0;
+int rishiethefishiehatesjews = 0;
+int c = 0;
 
 int RollerMecch(){
   while(true){
@@ -59,9 +59,9 @@ int RollerMecch(){
   }
   return(1);
 }
-//usless
 
-  /*int botInDiscs(){
+
+/*int botInDiscs(){
   while(true){
     if(DiscSensor.objectDistance(mm)<70){
       takein=0;
@@ -69,53 +69,115 @@ int RollerMecch(){
   else if (DiscSensor.objectDistance(mm)>70 && rishiethefishiehatesjews == 0){
       takein=1; 
   }
-  }
-  return(1);
-  }*/
-
-  
-  //settings
-  double kP = 0.009;
-  double kI = 0.00000;
-  double kD = 0.00;
-
-  double turnkP = 0.009;
-  double turnkI = 0.0000;
-  double turnkD = 0.00;
-
-  int desiredValue = 0;
-  int desiredTurnValue = 0;
-
-  int error; //Sensor Value - Target Value : position
-  int prevError = 0; //position 20 msecs ago
-  int derivative; //error-prevError : speed
-  int totalError = 0; //TotalError= totalError + error
-
-  int turnError; //Sensor Value - Target Value : position
-  int turnPrevError = 0; //position 20 msecs ago
-  int turnDerivative; //error-prevError : speed
-  int turnTotalError = 0; //TotalError= totalError + error
-
-
-
-
-  bool enableDrivePID= true;
-
-  bool resetDriveSensors=true;
-
-
-
-  //double fwdAxis =(RightSide.rotation(degrees)+LeftSide.rotation(degrees))/2;
-  //float sideAxis = BackSide.rotation(degrees);
-
-
-
-
-
+}
+return(1);
+}*/
 
 int p = 0;
 int a = 0;
 int f = 0;
+
+//settings
+double kP = 0.009;
+double kI = 0.00000;
+double kD = 0.00;
+
+double turnkP = 0.009;
+double turnkI = 0.0000;
+double turnkD = 0.00;
+
+int desiredValue = 0;
+int desiredTurnValue = 0;
+
+int error; //Sensor Value - Target Value : position
+int prevError = 0; //position 20 msecs ago
+int derivative; //error-prevError : speed
+int totalError = 0; //TotalError= totalError + error
+
+int turnError; //Sensor Value - Target Value : position
+int turnPrevError = 0; //position 20 msecs ago
+int turnDerivative; //error-prevError : speed
+int turnTotalError = 0; //TotalError= totalError + error
+
+
+
+
+bool enableDrivePID= true;
+
+bool resetDriveSensors=true;
+
+int drivePID(){
+  while(enableDrivePID){
+    if(resetDriveSensors){
+      RightSide.setPosition(0, degrees);
+      LeftSide.setPosition(0, degrees);
+      resetDriveSensors = false;
+
+    }
+
+   //int GyroPosition = Inertial5.heading(degrees);
+    //wheel position
+    int LeftWheelPosition = LeftSide.position(degrees);
+    int RightWheelPosition = RightSide.position(degrees);
+
+
+///////////////////////////////////////////////////////////////////////////
+//Lateral movement PID
+//////////////////////////////////////////////////////////////////////////
+
+    //average of the rotation
+    int averagePosition = (LeftWheelPosition+RightWheelPosition)/2;
+
+    //potential
+    error = desiredValue - averagePosition;
+
+    //derivative
+    derivative = prevError - error;
+
+    //velocity > position > absement(position*time)
+    totalError += error;
+
+    double lateralMotorPower = ((error * kP) + (derivative * kD) + (totalError * kI)); 
+
+
+///////////////////////////////////////////////////////////////////////////
+//Turning movement PID
+//////////////////////////////////////////////////////////////////////////
+
+//average of the rotation
+    int turnDifference = (LeftWheelPosition - RightWheelPosition);
+
+    //potential
+    turnError = desiredTurnValue + turnDifference;
+
+    //derivative
+    turnDerivative = turnError - turnPrevError;
+
+    //velocity > position > absement(position*time)
+    turnTotalError += error;
+
+    double turnMotorPower = (turnError * turnkP + turnDerivative * turnkD); //+ turnTotalError * turnkI); Doesnt work well
+
+
+/////////////////////////////////////////////////////////////////////////
+ 
+    fL.spin(forward, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    fR.spin(forward, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+    bL.spin(forward, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    bR.spin(forward, lateralMotorPower - turnMotorPower, voltageUnits::volt);
+
+
+    prevError = error;
+    turnPrevError = turnError;
+    wait(20, msec);
+  }
+
+  return 1;
+}
+
+//double fwdAxis =(RightSide.rotation(degrees)+LeftSide.rotation(degrees))/2;
+//float sideAxis = BackSide.rotation(degrees);
+
 void TR(float degs){
     Inertial5.setHeading(5, degrees);
     Inertial5.resetRotation();
@@ -146,7 +208,7 @@ void TL(float degs){
     while (Inertial5.rotation(degrees)>(degs)){
 
     error = (degs) + Inertial5.rotation(degrees);
-    //float MotorPower = error * 1.2;
+    float MotorPower = error * 1.2;
 
     fL.spin(reverse, 50, percent);
     bL.spin(reverse, 50, percent);
@@ -215,7 +277,7 @@ void DR(float degs){
   fL.resetPosition();
     while (fL.position(degrees)>(degs*-1)){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    //float MotorPower = error * kP;
+    float MotorPower = error * kP;
 
     fL.spin(reverse, 100, percent);
     bL.spin(reverse, 100, percent);
@@ -231,7 +293,7 @@ void DR(float degs){
     bL.setStopping(hold);
     bR.setStopping(hold);
  }
-  /*void intaketakein (){
+/*void intaketakein (){
   while(discsInBot<3){
     Intake.spin(forward, 100, percent);
     if(DiscSensor.objectDistance(mm)<36){
@@ -240,7 +302,7 @@ void DR(float degs){
   }
   Intake.stop();
 
-  }*/
+}*/
 
 void SR(float degs){
   RightSide.setPosition(0,degrees);
@@ -248,7 +310,7 @@ void SR(float degs){
   fL.resetPosition();
     while (fL.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    //float MotorPower = error * kP;
+    float MotorPower = error * kP;
 
     fL.spin(forward, 100, percent);
     bL.spin(forward, 100, percent);
@@ -271,7 +333,7 @@ void STR(float degs){
   fL.resetPosition();
     while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    //float MotorPower = error * kP;
+    float MotorPower = error * kP;
 
     fL.spin(forward, 100, percent);
     bL.spin(reverse, 100, percent);
@@ -297,7 +359,7 @@ void STL(float degs){
   fL.resetPosition();
     while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    //float MotorPower = error * kP;
+    float MotorPower = error * kP;
 
     fL.spin(reverse, 100, percent);
     bL.spin(forward, 100, percent);
@@ -332,22 +394,39 @@ void RollerMech(){
   takein = 2;
   }
 }
+int shootythingy = 0;
 
 void shootdiscs(int discs, int flypower){
   int discs_shot = 0;
     while(discs_shot < discs){
       flywheel.spin(forward, flypower, percent);
+      shootythingy = 1;
       Indexer = 1;
       wait(150,msec);
       Indexer = 0;
+      shootythingy = 0;
       discs_shot = discs_shot+1;
       discsInBot = discsInBot - 1;
-      wait(1.5,seconds);
+      wait(1,seconds);
     }
 }
+int detectDisc(){
+  while(true){
+  if(shootythingy == 0){
+  if(DiscSensor.objectDistance(mm) > 110){
+    Indexer = 1;
+  }
+  else{
+    Indexer = 0;
+  }
+  wait (0.2, seconds); 
+  }
+  }
+    return 0;
 
+}
 int backgroundTasks()
-  {
+{
   while (true)
   {
     updatePosition(); // Update the odometry position
@@ -359,17 +438,8 @@ int backgroundTasks()
   }
   return 0;
 }
-int graphodom(){
-  while(true){
-  values();
-  odomDisplay();
-  graph();
-  task::sleep(10);
-  }
-    return 0;
-}
 void Dtoroller(){
-  while(!Optical40.isNearObject()){
+  while(!Optical4.isNearObject() or !Optical40.isNearObject()){
     fL.spin(reverse, 100, percent);
     bL.spin(reverse, 100, percent);
     fR.spin(reverse, 100, percent);
@@ -384,26 +454,7 @@ void Dtoroller(){
     bL.setStopping(hold);
     bR.setStopping(hold);
 }
-digital_out Wall = digital_out(Brain.ThreeWirePort.C);
-distance DiscSensor = distance(PORT9);
 int flypct = 50;
-
-int discDistance;
-
-int detectDisc(){
-  while(true){
-    discDistance = DiscSensor.objectDistance(mm);
-  if(discDistance > 90){
-    Indexer = 1;
-  }
-  else{
-    Indexer = 0;
-  }
-  wait (0.2, seconds); 
-  return discDistance;
-  }
-}
-
 
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -411,11 +462,12 @@ void pre_auton(void) {
   Indexer = 0;
   Endgame = 0;
   Endgame2 = 0;
-  Wall = 1;
+  shootythingy = 0;
   Inertial5.calibrate();
   discsInBot=0; 
   wait(3,seconds);
   while(true){
+  //thread t(detectDisc);
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("RPM:%d",flypct);
   Controller1.Screen.setCursor(2,1);
@@ -430,14 +482,10 @@ void pre_auton(void) {
   //}
   wait(50,msec); 
   Controller1.Screen.clearScreen();
-  Brain.Screen.setFillColor(red);
-  gui::thatthingyoupress RedSide(5,5);  
-  Brain.Screen.setFillColor(black);
+  gui::thatthingyoupress RedSide(5,5);
   Brain.Screen.setCursor(4,2);
   Brain.Screen.print("Red");
-  Brain.Screen.setFillColor(blue);
   gui::thatthingyoupress BlueSide(75,5);
-  Brain.Screen.setFillColor(black);
   Brain.Screen.setCursor(4,9);
   Brain.Screen.print("Blue");
   gui::thatthingyoupress PosLeft(5,100); 
@@ -696,10 +744,11 @@ void pre_auton(void) {
   if(LockIn.pressed()){
     while(LockIn.pressed()){
     wait(10,msec);
-    break;
   }
+  if(f != 1)
+  f=1;
   }
-  /*if(f == 1){
+  if(f == 1){
   Brain.Screen.setFillColor(black);
   Brain.Screen.setPenColor(black);
   Brain.Screen.drawRectangle(0, 0, 500, 500);
@@ -738,12 +787,9 @@ void pre_auton(void) {
     Brain.Screen.setCursor(3,36);
     Brain.Screen.print("2");
   }
-  }*/
-  
+  }
   wait (250, msec);
   }
-  
-  thread v(graphodom);
   
     wait(20,msec);
     takein=0;
@@ -761,6 +807,41 @@ void autonomous(void) {
   thread o(backgroundTasks);
   
   if(p == 1 && a == 1){
+/*discsInBot=2;
+  flywheel.spin(forward, 92, percent);
+  DF(10, 100);
+  Intake.spin(reverse, 50,percent);
+  wait(0.4, sec); 
+  Intake.stop();
+  wait(100, msec);
+  RollerMech();   
+  DR(30);
+  turnPIDCycle(-135, 100);
+  turnPID(-135, 100, -1); 
+  Intake.spin(forward, 100, percent); 
+  DF(650, 100);
+  turnPIDCycle(-90, 100);
+  turnPID(-90, 100, -1);
+  DFmotor(300, 100);
+  wait(0.3, seconds); 
+  DFmotor(10, 50);
+  wait(0.1, seconds);
+  RollerMech();
+  getDegToPoint(-86.3 , 11.5);
+  setTarget(-86.3 , 11.5);
+  turnToTarget(100);
+   shootdiscs(1, 82);
+   wait(1, seconds);
+  shootdiscs(2, 89);
+  turnPIDCycle(-260, 100);
+  turnPID(-260, 100, -1); 
+  Intake.spin(forward, 100, percent);
+  DF(400, 100);
+  DF(700, 50);
+  getDegToPoint(-86.3 , 11.5);
+  setTarget(-86.3 , 11.5);
+  turnToTarget(100);
+  shootdiscs(3, 90);*/
   flywheel.spin(forward, 100, volt);
   DR(10);
   roller.spinFor(forward, 200, degrees);
@@ -778,37 +859,22 @@ void autonomous(void) {
   shootdiscs(2, 94);
   turnPIDCycle(135, 100);
   turnPID(135, 100, -1);
-  DR(1100);
+  //DR(1100);
   roller.spinFor(forward, 200, degrees);
   }
   if(p == 1 && a == 2){
-  flywheel.spin(forward, 100, percent);
+  flywheel.spin(forward, 96, percent);
   DR(10);
   roller.spinFor(forward, 400, degrees);
+  turnPIDCycle(5, 100);
+  turnPID(5, 100, -1); 
+  
+  wait(3, seconds);
+  shootdiscs(2, 96);
   DFmotor(10, 50);
   turnPIDCycle(-45, 100);
   turnPID(-45, 100, -1);  
   Intake.spin(forward,100,percent);
-  flywheel.spin(forward, 100, volt);
-  DFmotor(550, 100);
-  wait(0.1, seconds);
-  DFmotor(200, 50);
-  wait(0.1, seconds);
-  turnPIDCycle(20, 100);
-  turnPID(20, 100, -1);  
-  wait(0.5, seconds);
-  shootdiscs(3, 94);
-  }
-  if(p == 1 && a == 3){
-  flywheel.spin(forward, 100, volt);
-  DR(10);
-  roller.spinFor(forward, 500, degrees);
-  wait(4, seconds);
-  shootdiscs(2, 94);
-  DFmotor(10, 50); 
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);  
-  /*Intake.spin(forward,100,percent);
   flywheel.spin(forward, 100, volt);
   DFmotor(550, 100);
   wait(0.1, seconds);
@@ -817,36 +883,45 @@ void autonomous(void) {
   turnPIDCycle(45, 100);
   turnPID(45, 100, -1);  
   shootdiscs(2, 94);
-  turnPIDCycle(-47, 100);
-  turnPID(-47, 100, -1); 
-  DR(1000);
-  roller.spinFor(forward, 500, degrees);
-  turnPIDCycle(135, 100);
-  turnPID(135, 100, -1);*/ 
-  Endgame = 1;
-  Endgame2 = 1;
-
-  /*turnPIDCycle(-180, 100); 
-  turnPID(-180, 100, -1);
-  DR(200);
-  repeat (3){
-    turnPIDCycle(-180, 100);
-    turnPID(-180, 100, -1);
-    wait(3, seconds);
-    turnPIDCycle(-268, 100);
-    turnPID(-268, 100, -1);
-    shootdiscs(3, 75);
   }
-  turnPIDCycle(-360, 100);
-  turnPID(-360, 100, -1);
-  DR(100);
-  turnPIDCycle(-225, 100);
-  turnPID(-225, 100, -1);
-  DF(1900, 100);*/
+  if(p == 1 && a == 3){
+ flywheel.spin(forward, 50, percent);
+  DR(10);
+  roller.spinFor(forward, 500, degrees);
+  DFmotor(20, 100);
+  Intake.spin(forward, 100, percent);
+  turnPIDCycle(45, 100);
+  turnPID(45, 100, -1);
+  DFmotor(400, 100);
+  turnPIDCycle(-90, 100);
+  turnPID(-90, 100, -1);
+  Dtoroller();
+  roller.spinFor(forward, 500, degrees);
+  DFmotor(20, 100);
+  turnPIDCycle(0, 100);
+  turnPID(0, 100, -1);
+  DFmotor(800, 100);
+  turnPIDCycle(2, 50);
+  turnPID(2, 50, -1);
+  shootdiscs(3, 52);
+  turnPIDCycle(-135, 100);
+  turnPID(-135, 100, -1);
+  DFmotor(400, 100);
+  turnPIDCycle(-45, 100);
+  turnPID(-45, 100, -1);
+  DFmotor(700, 100);
+  turnPIDCycle(0, 100);
+  turnPID(0, 100, -1);
+  DFmotor(800, 100);
+  turnPIDCycle(90, 100);
+  turnPID(90, 100, -1);
+  shootdiscs(3, 52);
+  //Endgame = 1;
+  //Endgame2 = 1;
 
   
   }
-  //Right Side & Red
+//Right Side & Red
   if(p == 2 && a == 4){
   setStartingPos(0, 0);
   flywheel.spin(forward, 100, percent);
@@ -870,31 +945,35 @@ void autonomous(void) {
   }
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
-    flywheel.spin(forward, 80, percent);
-    turnPIDCycle(-80, 100);
-    turnPID(-80, 100, 1500);
+    flywheel.spin(forward, 96, percent);
+    turnPIDCycle(-12, 100);
+    turnPID(-12, 100, -1);
+    wait(1.3, sec); 
+    shootdiscs(2, 97);
+    turnPIDCycle(-85, 100);
+    turnPID(-85, 100, 1500);
     DFmotor(300, 100);
-    turnPIDCycle(0, 100);
+;    turnPIDCycle(0, 100);
     turnPID(0, 100, -1);     
     Dtoroller();
-    roller.spinFor(forward, 400, degrees);
+    roller.spinFor(forward, 300, degrees);
     DFmotor(5, 100);
     turnPIDCycle(45, 100);
     turnPID(45, 100, -1);
     Intake.spin(forward, 100, percent); 
     DFmotor(200, 100);
     DFmotor(600, 40);
-    turnPIDCycle(-21, 100);
-    turnPID(-21, 100, 2000);   
-    shootdiscs(3, 80);
+    turnPIDCycle(-45, 100);
+    turnPID(-45, 100, 2000);   
+    shootdiscs(4, 87);
   }
 }
 
-
+  
 int rishiethefishielovesjews = 0;
 int shooter = 0;
 
-  int rishithefishilovesandhatesjews(){
+int rishithefishilovesandhatesjews(){
   /*if(Controller1.ButtonL2.pressing()){
     if(p == 2){
     getDegToPoint(-70.9 , -0.7);
@@ -923,9 +1002,9 @@ int shooter = 0;
     }
   }*/
   return(1);
-  }
+}
 int test()
-  {
+{
   while (getTotalDistance() < 10)
   {
     task::sleep(10);
@@ -938,9 +1017,8 @@ int test()
 }
 
 
-int rightendgame = 0;
-int leftendgame = 0;
-int endgame_safe = 0;
+int rishithefishilovesandhatesjewsbutmainlylovesjews = 0;
+int rishithefishilovesandhatesjewsbutmainlyhatesjews = 0;
 
 
 void usercontrol(void) {
@@ -949,18 +1027,17 @@ void usercontrol(void) {
 
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
-  //int deadband = 5;
+  int deadband = 5;
   shooter = 1;
   takein = 1;
   rishiethefishielovesjews = 1;
   rishiethefishiehatesjews = 1;
-  int rightendgame = 0;
-  int leftendgame = 0;
+int rishithefishilovesandhatesjewsbutmainlylovesjews = 0;
+    int rishithefishilovesandhatesjewsbutmainlyhatesjews = 0;
   while (true) {
     thread t(rishithefishilovesandhatesjews);
     thread r(RollerMecch);
     thread a(backgroundTasks);
-    thread k(detectDisc);
     fL.setStopping(hold); 
     fR.setStopping(hold);
     bR.setStopping(hold);
@@ -970,12 +1047,12 @@ void usercontrol(void) {
     int sidewayscontroller= Controller1.Axis4.position(percent);
     int turncontroller= Controller1.Axis1.position(percent);
 
-  fR.spin(forward, forwardcontroller-sidewayscontroller-turncontroller, percent);
-  fL.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
-  bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
-  bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
+fR.spin(forward, forwardcontroller-sidewayscontroller-turncontroller, percent);
+fL.spin(forward, forwardcontroller+sidewayscontroller+turncontroller, percent);
+bR.spin(forward, forwardcontroller+sidewayscontroller-turncontroller, percent);
+bL.spin(forward, forwardcontroller-sidewayscontroller+turncontroller, percent);
 
-  /*if(DiscSensor.objectDistance(mm)<70){
+/*if(DiscSensor.objectDistance(mm)<70){
       takein=0;
     }
   else if (DiscSensor.objectDistance(mm)>70 && rishiethefishiehatesjews == 0){
@@ -1007,13 +1084,15 @@ void usercontrol(void) {
  
     if(Controller1.ButtonR1.pressing()){
       wait(10, msec);
+      shootythingy = 1;
       Indexer = 1; 
       wait(150,msec);
       Indexer = 0;
+      shootythingy = 0;
     }  
 
     
-  if(Controller1.ButtonY.pressing()){ 
+if(Controller1.ButtonY.pressing()){ 
       
     while(Controller1.ButtonY.pressing()){
         wait(10,msec);
@@ -1042,11 +1121,11 @@ void usercontrol(void) {
     }
  
     if(rishiethefishielovesjews == 0){
-  flypct = 80;
+flypct = 80;
 
     }
     if(rishiethefishielovesjews == 1){
-  flypct = 50;
+flypct = 50;
 
     }
     if(Controller1.ButtonUp.pressing()){
@@ -1059,9 +1138,17 @@ void usercontrol(void) {
     rishiethefishielovesjews = -1;
   }
 
+  if(rishithefishilovesandhatesjewsbutmainlyhatesjews >= 2){
+    wait(10, msec);
+    Endgame = 1; 
+    
+  }
+  if(rishithefishilovesandhatesjewsbutmainlylovesjews >=2 ){
+    wait(10, msec);
+    Endgame2 = 1; 
+  }
   
-  
-  if(Controller1.ButtonDown.pressing()){
+if(Controller1.ButtonDown.pressing()){
     while(Controller1.ButtonDown.pressing()){
       wait(10,msec);
     }      
@@ -1070,32 +1157,25 @@ void usercontrol(void) {
         takein=0;
       }
   }
-
-  
-  if(Controller1.ButtonL1.pressing() && endgame_safe == 1){
-    while(Controller1.ButtonL1.pressing()){
-      wait(10,msec);
-    }      
-    Wall = 0;
-  }
-  if(Controller1.ButtonL2.pressing() && Controller1.ButtonR2.pressing()){
-    while(Controller1.ButtonL2.pressing() && Controller1.ButtonR2.pressing()){
-      wait(10,msec);
-    }      
-      endgame_safe=endgame_safe+1;
-  }
-
-  if(Controller1.ButtonL2.pressing() && endgame_safe == 1){
-    while(Controller1.ButtonL2.pressing()){
-      wait(10,msec);
-    }      
-      leftendgame=leftendgame+1;
-  }
-  if(Controller1.ButtonR2.pressing() && endgame_safe == 1){
+if(Controller1.ButtonR2.pressing()){
     while(Controller1.ButtonR2.pressing()){
       wait(10,msec);
     }      
-      rightendgame=rightendgame+1;
+      rishithefishilovesandhatesjewsbutmainlylovesjews=rishithefishilovesandhatesjewsbutmainlylovesjews+1;
+  }
+  if(Controller1.ButtonL2.pressing()){
+    while(Controller1.ButtonL2.pressing()){
+      wait(10,msec);
+    }      
+      rishithefishilovesandhatesjewsbutmainlyhatesjews=rishithefishilovesandhatesjewsbutmainlyhatesjews+1;
+  }
+
+  if(Controller1.ButtonR2.pressing() && Controller1.ButtonL2.pressing()){
+    while(Controller1.ButtonR2.pressing() && Controller1.ButtonL2.pressing()){
+      wait(10,msec);
+    }      
+      Endgame = 1;
+      Endgame2 = 1;
   }
   
   flywheel.setVelocity(flypct, percent);
@@ -1120,6 +1200,6 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
-    wait(100, msec); 
+    wait(100, msec);
   }
 }

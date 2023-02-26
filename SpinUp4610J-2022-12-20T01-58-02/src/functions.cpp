@@ -76,11 +76,11 @@ void resetTotalDistance()
 
 // Obtain the current values of the tracking wheel encoders
 double getRightReading() {
-  return ticksToInches(xEncoder.rotation(deg)); // negative because right encoder is backwards
+  return ticksToInches(RightSide.rotation(deg)); // negative because right encoder is backwards
 }
 
 double getLeftReading() {
-  return ticksToInches(xEncoder.rotation(deg));
+  return ticksToInches(RightSide.rotation(deg));
 }
 
 
@@ -263,13 +263,13 @@ double fwdPIDCycle(double targetDist, double maxSpeed)
 // The target angle is relative to the starting angle of the robot in degrees
 double turnPIDCycle(double targetDegree, double maxSpeed) 
 {
-  double Kp = 0.6;
+  double Kp = 0.65;
   double Ki = 0.000;//0.01;
-  double Kd = 0.2;//1;
+  double Kd = 0.07;//1;
   double integralPowerLimit =
       40 / Ki;                   // little less than half power
   double integralActiveZone = 15; // degrees to start accumulating to integral
-  double errorThreshold = 0.25; // Exit loop when error is less than this
+  double errorThreshold = 0.5; // Exit loop when error is less than this
 
   double speed = 0;
 
