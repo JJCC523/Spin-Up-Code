@@ -36,7 +36,7 @@ extern motor flywheel;
 extern digital_out Endgame;
 extern digital_out Endgame2;
 extern motor roller;
-
+extern digital_out Wall;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

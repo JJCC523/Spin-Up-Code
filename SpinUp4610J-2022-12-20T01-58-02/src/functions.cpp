@@ -263,13 +263,13 @@ double fwdPIDCycle(double targetDist, double maxSpeed)
 // The target angle is relative to the starting angle of the robot in degrees
 double turnPIDCycle(double targetDegree, double maxSpeed) 
 {
-  double Kp = 0.65;
-  double Ki = 0.000;//0.01;
-  double Kd = 0.07;//1;
+  double Kp = 0.6;
+  double Ki = 0.001;//0.01;
+  double Kd = 0.06;//1;
   double integralPowerLimit =
       40 / Ki;                   // little less than half power
   double integralActiveZone = 15; // degrees to start accumulating to integral
-  double errorThreshold = 0.5; // Exit loop when error is less than this
+  double errorThreshold = 0.2; // Exit loop when error is less than this
 
   double speed = 0;
 

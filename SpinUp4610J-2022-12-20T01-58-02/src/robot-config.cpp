@@ -34,7 +34,7 @@ motor flywheel = motor(PORT10, ratio6_1, false);
 digital_out Endgame = digital_out(Brain.ThreeWirePort.F);
 digital_out Endgame2 = digital_out(Brain.ThreeWirePort.G);
 motor roller = motor(PORT6, ratio6_1, true);
-
+digital_out Wall = digital_out(Brain.ThreeWirePort.C);
 
 /*vex-vision-config:end*/
 
