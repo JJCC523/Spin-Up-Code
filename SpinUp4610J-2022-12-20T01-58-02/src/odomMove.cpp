@@ -1,14 +1,13 @@
-/*#include "vex.h"
-#include "odomtrack.cpp"
+#include "vex.h"
+#include "odom.cpp"
 
-double targetDeg = 0;
-double targetDistance = 0;
+
 
 
 double rotToPoint(double x, double y)
 {
-  double relativeX = x - X;
-  double relativeY = y - Y;
+  double relativeX = x - globalX;
+  double relativeY = y - globalY;
 
   // atan2(y, x) gives the absolute angle from the origin to the specified point
   // This is the angle to turn to to get from the current point to the target point
@@ -65,7 +64,7 @@ void MTP(float getX, float getY, double maxFwdSpeed, double maxTurnSpeed)
 
   targetDistance = getDistanceTo(getX, getY);
 
-   while (curFwdSpeed != 0 && fabs(targetDistance) > 3
+   while (curFwdSpeed != 0 && fabs(targetDistance) > 3)
   {
     targetDistance = getDistanceTo(getX, getY);
     targetDeg = getDegToPoint(getX, getY);
@@ -77,4 +76,4 @@ void MTP(float getX, float getY, double maxFwdSpeed, double maxTurnSpeed)
     Brain.Screen.printAt(210, 120, "target: (%.1f, %.1f) %.1f deg", getX, getY, targetDeg);
     task::sleep(5);
   }
-}*/
+}

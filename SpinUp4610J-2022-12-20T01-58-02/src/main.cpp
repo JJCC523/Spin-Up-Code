@@ -15,6 +15,8 @@
 
 #include "vex.h"
 #include "TheBrainThingy.cpp"
+#include "odomMove.cpp"
+
 
 using namespace vex;
 
@@ -208,7 +210,6 @@ void TL(float degs){
     while (Inertial5.rotation(degrees)>(degs)){
 
     error = (degs) + Inertial5.rotation(degrees);
-    float MotorPower = error * 1.2;
 
     fL.spin(reverse, 50, percent);
     bL.spin(reverse, 50, percent);
@@ -224,8 +225,6 @@ void TL(float degs){
     bL.setStopping(hold); 
     bR.setStopping(hold);
 }
-  //float fwdAxis = ((RightSide.position(degrees)+LeftSide.position(degrees))/2);
-
 void DF(float degs, int pwr){
   RightSide.setPosition(0,degrees);
   LeftSide.setPosition(0,degrees);
@@ -277,7 +276,6 @@ void DR(float degs){
   fL.resetPosition();
     while (fL.position(degrees)>(degs*-1)){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    float MotorPower = error * kP;
 
     fL.spin(reverse, 100, percent);
     bL.spin(reverse, 100, percent);
@@ -293,16 +291,7 @@ void DR(float degs){
     bL.setStopping(hold);
     bR.setStopping(hold);
  }
-/*void intaketakein (){
-  while(discsInBot<3){
-    Intake.spin(forward, 100, percent);
-    if(DiscSensor.objectDistance(mm)<36){
-      discsInBot = discsInBot+1;
-    } 
-  }
-  Intake.stop();
 
-}*/
 
 void SR(float degs){
   RightSide.setPosition(0,degrees);
@@ -310,7 +299,6 @@ void SR(float degs){
   fL.resetPosition();
     while (fL.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    float MotorPower = error * kP;
 
     fL.spin(forward, 100, percent);
     bL.spin(forward, 100, percent);
@@ -333,7 +321,6 @@ void STR(float degs){
   fL.resetPosition();
     while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    float MotorPower = error * kP;
 
     fL.spin(forward, 100, percent);
     bL.spin(reverse, 100, percent);
@@ -359,7 +346,6 @@ void STL(float degs){
   fL.resetPosition();
     while (BackSide.position(degrees)<degs){
     error = degs - ((RightSide.position(degrees)*LeftSide.position(degrees))/2);
-    float MotorPower = error * kP;
 
     fL.spin(reverse, 100, percent);
     bL.spin(forward, 100, percent);
@@ -1043,6 +1029,8 @@ int wallEndgame = 0;
 void usercontrol(void) {
   enableDrivePID= false;
     int takein = 1;
+    timer Timer;
+    Timer.reset();
 
   while (1) {
     // Deadband stops the motors when Axis values are close to zero.
@@ -1053,15 +1041,12 @@ void usercontrol(void) {
   rishiethefishiehatesjews = 1;
   int rightendgame = 0;
   int leftendgame = 0;
-  while (true) {
+  while (true) {    
     thread t(rishithefishilovesandhatesjews);
     thread r(RollerMecch);
     thread a(backgroundTasks);
     //thread k(detectDisc);
-    fL.setStopping(hold); 
-    fR.setStopping(hold);
-    bR.setStopping(hold);
-    bL.setStopping(hold);
+    
 
     int forwardcontroller = Controller1.Axis3.position(percent);
     int sidewayscontroller= Controller1.Axis4.position(percent);
@@ -1198,6 +1183,18 @@ void usercontrol(void) {
   }
   if (wallEndgame >= 1){
     Wall = 1;
+  }
+  if(Timer.time() < 95000){
+    fL.setStopping(coast); 
+    fR.setStopping(coast);
+    bR.setStopping(coast);
+    bL.setStopping(coast);
+  }
+  else if (Timer.time() > 95000) {
+    fL.setStopping(hold); 
+    fR.setStopping(hold);
+    bR.setStopping(hold);
+    bL.setStopping(hold);
   }
   
   flywheel.setVelocity(flypct, percent);
