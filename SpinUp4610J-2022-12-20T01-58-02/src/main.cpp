@@ -15,7 +15,7 @@
 
 #include "vex.h"
 #include "TheBrainThingy.cpp"
-#include "odomMove.cpp"
+//#include "odomMove.cpp"
 
 
 using namespace vex;
@@ -855,26 +855,37 @@ void autonomous(void) {
   roller.spinFor(forward, 300, degrees);
   }
   if(p == 1 && a == 2){
-  flywheel.spin(forward, 96, percent);
+  flywheel.spin(forward, 100, percent);
   DR(10);
   roller.spinFor(forward, 400, degrees);
-  turnPIDCycle(5, 100);
-  turnPID(5, 100, -1); 
-  
-  wait(3, seconds);
-  shootdiscs(2, 96);
+  //DFmotor(10, 100);
+  //turnPIDCycle(5, 100);
+  //turnPID(5, 100, -1); 
+  //waitUntil(flywheel.velocity(rpm)*6 >=2800);
+  //shootdiscs(2, 100);
   DFmotor(10, 50);
   turnPIDCycle(-45, 100);
   turnPID(-45, 100, -1);  
   Intake.spin(forward,100,percent);
-  flywheel.spin(forward, 100, volt);
+  flywheel.spin(forward, 100, percent);
   DFmotor(550, 100);
   wait(0.1, seconds);
   DFmotor(750, 50);
+  turnPIDCycle(35, 100);
+  turnPID(35, 100, -1);
+  DF(20, 100);  
+  waitUntil(flywheel.velocity(rpm)*6 >=2450);
+  shootdiscs(1, 100);
+  waitUntil(flywheel.velocity(rpm)*6 >=2800);
+  shootdiscs(1, 100);
+  waitUntil(flywheel.velocity(rpm)*6 >=2800);
+  shootdiscs(1, 100); 
+  waitUntil(flywheel.velocity(rpm)*6 >=2800);
+  shootdiscs(1, 100);
+  turnPIDCycle(-45, 100);
+  turnPID(-45, 100, -1);
   wait(0.1, seconds);
-  turnPIDCycle(45, 100);
-  turnPID(45, 100, -1);  
-  shootdiscs(2, 94);
+  DFmotor(750, 50);  
   }
   if(p == 1 && a == 3){
   flywheel.spin(forward, 65, percent);
@@ -950,14 +961,12 @@ void autonomous(void) {
   if(p == 2 && a == 5){
     setStartingPos(0, 0);
     flywheel.spin(forward, 96, percent);
-    turnPIDCycle(-12, 100);
-    turnPID(-12, 100, -1);
-    wait(1.3, sec); 
-    shootdiscs(2, 97);
+    //turnPIDCycle(-12, 100);
+    //turnPID(-12, 100, -1);
     turnPIDCycle(-85, 100);
     turnPID(-85, 100, 1500);
     DFmotor(300, 100);
-;    turnPIDCycle(0, 100);
+    turnPIDCycle(0, 100);
     turnPID(0, 100, -1);     
     Dtoroller();
     roller.spinFor(forward, 300, degrees);
@@ -966,10 +975,15 @@ void autonomous(void) {
     turnPID(45, 100, -1);
     Intake.spin(forward, 100, percent); 
     DFmotor(200, 100);
-    DFmotor(600, 40);
-    turnPIDCycle(-45, 100);
-    turnPID(-45, 100, 2000);   
-    shootdiscs(4, 87);
+    DFmotor(500, 40);
+    turnPIDCycle(-25, 100);
+    turnPID(-25, 100, 2000);   
+    waitUntil(flywheel.velocity(rpm)*6 >=2775);
+    shootdiscs(1, 1000);
+    waitUntil(flywheel.velocity(rpm)*6 >=2775);
+    shootdiscs(1, 1000);
+    waitUntil(flywheel.velocity(rpm)*6 >=2775);
+    shootdiscs(1, 1000);
   }
 }
 
